@@ -4,9 +4,11 @@ plugins {
   alias(libs.plugins.android.kotlin) apply false
   alias(libs.plugins.android.library) apply false
   alias(libs.plugins.spotless) apply false
+  alias(libs.plugins.kover) apply false
 }
 
-allprojects {
+subprojects {
+  apply<kotlinx.kover.gradle.plugin.KoverGradlePlugin>()
 
   apply<com.diffplug.gradle.spotless.SpotlessPlugin>()
   extensions.configure<com.diffplug.gradle.spotless.SpotlessExtension> {

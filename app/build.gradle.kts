@@ -71,6 +71,7 @@ dependencies {
   rootProject.childProjects.forEach {
     if (it.key == "app") return@forEach
     implementation(it.value)
+    kover(it.value)
     println("### app module apply ${it.value}")
   }
 

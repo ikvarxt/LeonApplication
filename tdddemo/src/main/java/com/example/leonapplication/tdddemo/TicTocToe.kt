@@ -8,11 +8,7 @@ sealed class Player(val name: String) {
 
 class TicTocToe {
 
-  private val board = arrayOf<Array<Player?>>(
-    arrayOfNulls(3),
-    arrayOfNulls(3),
-    arrayOfNulls(3),
-  )
+  private val board = emptyBoard()
   var nextPlayer: Player = Player.A
     private set
   var winner: Player = Player.None

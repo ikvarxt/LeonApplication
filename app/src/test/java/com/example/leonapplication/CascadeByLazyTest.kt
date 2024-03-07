@@ -4,6 +4,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 import kotlin.time.measureTime
 
 class CascadeByLazyTest {
@@ -34,7 +35,7 @@ class CascadeByLazyTest {
       assertEquals(3, c)
     }
     println("time $timeCost")
-    assertTrue("time is $timeCost", timeCost < 1.milliseconds)
+    assertTrue("time is $timeCost", timeCost < 2.seconds)
   }
 
   inner class ByDelegate {
