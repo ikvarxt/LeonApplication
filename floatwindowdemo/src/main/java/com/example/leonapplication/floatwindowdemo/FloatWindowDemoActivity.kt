@@ -46,7 +46,8 @@ class FloatWindowDemoActivity : AppCompatActivity() {
     super.onStart()
 
     if (Settings.canDrawOverlays(this@FloatWindowDemoActivity)) {
-      launchFloatWindow()
+      if (floatingView == null)
+        launchFloatWindow()
     }
   }
 
@@ -54,20 +55,18 @@ class FloatWindowDemoActivity : AppCompatActivity() {
   private fun launchFloatWindow() {
     removeView()
     windowLayoutParams = createWindowParams()
-    floatingView = layoutInflater.inflate(
-      R.layout.layout_float_window_demo,
-      null,
-      false
-    ).apply {
+    floatingView = createView().apply {
       setOnTouchListener { view, event ->
-        when (event.action) {
+        return@setOnTouchListener when (event.action) {
           MotionEvent.ACTION_MOVE -> {
             windowLayoutParams?.x = event.rawX.toInt() - view.width / 2
             windowLayoutParams?.y = event.rawY.toInt() - view.height / 2
             windowManager.updateViewLayout(floatingView, windowLayoutParams)
+            true
           }
+
+          else -> false
         }
-        return@setOnTouchListener true
       }
     }
     windowManager.addView(floatingView, windowLayoutParams)
@@ -81,13 +80,17 @@ class FloatWindowDemoActivity : AppCompatActivity() {
   private fun createWindowParams() = WindowManager.LayoutParams().apply {
     type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
     flags = TOUCHABLE_WIN_FLAG
-    width = WindowManager.LayoutParams.WRAP_CONTENT
-    height = WindowManager.LayoutParams.WRAP_CONTENT
+    width = 300 // WindowManager.LayoutParams.WRAP_CONTENT
+    height = 300 // WindowManager.LayoutParams.WRAP_CONTENT
     format = PixelFormat.TRANSLUCENT
     // don't know why have to set gravity to top | start to this view to make x and y correct
     gravity = Gravity.TOP or Gravity.START
     x = 0
     y = 28.dp
+  }
+
+  private fun createView(): View {
+    return ViewProviderImpl.getView(this@FloatWindowDemoActivity)
   }
 
   override fun onDestroy() {

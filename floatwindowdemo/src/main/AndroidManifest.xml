@@ -2,24 +2,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
   <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+  <uses-feature
+    android:glEsVersion="0x00020000"
+    android:required="true" />
 
   <application>
-    <activity
+
+  <activity
       android:name=".FloatWindowDemoActivity"
       android:taskAffinity="com.example.leonapplication.floatwindowdemo.demo"
       android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
 
-    <activity-alias
-      android:name="FloatWindowDemoActivityAlias"
-      android:exported="true"
-      android:label="FloatWindowDemoActivity"
-      android:targetActivity=".FloatWindowDemoActivity">
-
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN" />
-        <category android:name="android.intent.category.LAUNCHER" />
-      </intent-filter>
-    </activity-alias>
   </application>
-
 </manifest>

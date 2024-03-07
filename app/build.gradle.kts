@@ -18,6 +18,9 @@ android {
     vectorDrawables {
       useSupportLibrary = true
     }
+    // here to select which variant will be using when implement :floatwindowdemo module
+    // first variant will be selected
+    missingDimensionStrategy("viewType", "surfaceView", "normalView")
   }
 
   buildTypes {
