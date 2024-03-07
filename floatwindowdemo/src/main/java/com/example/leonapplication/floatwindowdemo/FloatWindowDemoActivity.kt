@@ -80,8 +80,8 @@ class FloatWindowDemoActivity : AppCompatActivity() {
   private fun createWindowParams() = WindowManager.LayoutParams().apply {
     type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
     flags = TOUCHABLE_WIN_FLAG
-    width = 300 // WindowManager.LayoutParams.WRAP_CONTENT
-    height = 300 // WindowManager.LayoutParams.WRAP_CONTENT
+    width = ViewProvider.width // WindowManager.LayoutParams.WRAP_CONTENT
+    height = ViewProvider.height // WindowManager.LayoutParams.WRAP_CONTENT
     format = PixelFormat.TRANSLUCENT
     // don't know why have to set gravity to top | start to this view to make x and y correct
     gravity = Gravity.TOP or Gravity.START
@@ -90,7 +90,7 @@ class FloatWindowDemoActivity : AppCompatActivity() {
   }
 
   private fun createView(): View {
-    return ViewProviderImpl.getView(this@FloatWindowDemoActivity)
+    return ViewProvider.get(this@FloatWindowDemoActivity)
   }
 
   override fun onDestroy() {
@@ -100,6 +100,7 @@ class FloatWindowDemoActivity : AppCompatActivity() {
 
   companion object {
 
+    @Suppress("unused")
     private const val TAG = "FloatWindowDemoActivity"
 
     private fun requestPermissionOrLunchWindow(context: Context, launchAction: () -> Unit) {
