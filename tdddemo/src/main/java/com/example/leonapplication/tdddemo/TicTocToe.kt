@@ -5,6 +5,11 @@ sealed class Player(val name: String) {
   data object B : Player("B")
 }
 
+internal fun Player.next() = when (this) {
+  Player.A -> Player.B
+  Player.B -> Player.A
+}
+
 class TicTocToe {
 
   private val board = emptyBoard()
@@ -26,10 +31,7 @@ class TicTocToe {
     winner = checkIsWin()
     if (hasWinner) return
 
-    nextPlayer = when (nextPlayer) {
-      Player.A -> Player.B
-      Player.B -> Player.A
-    }
+    nextPlayer = nextPlayer.next()
   }
 
   private fun checkIsWin(): Player? {
