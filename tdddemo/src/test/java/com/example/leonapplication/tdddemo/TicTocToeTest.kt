@@ -131,12 +131,12 @@ class TicTocToeTest {
   @Test
   fun whenGameHasWinnerThanHasWinner() {
     board.play(0, 0) // A
-    assertFalse(board.hasWinner())
+    assertFalse(board.hasWinner)
     board.play(1, 1) // B
     board.play(0, 1) // A
     board.play(1, 2) // B
     board.play(0, 2) // A
-    assertTrue(board.hasWinner())
+    assertTrue(board.hasWinner)
   }
 
   @Test

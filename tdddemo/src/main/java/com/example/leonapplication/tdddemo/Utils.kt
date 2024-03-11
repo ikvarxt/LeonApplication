@@ -3,12 +3,12 @@ package com.example.leonapplication.tdddemo
 
 fun emptyBoard() = arrayOf<Array<Player?>>(arrayOfNulls(3), arrayOfNulls(3), arrayOfNulls(3))
 
-fun Array<Array<Player?>>.checkIfAllLineIsSamePlayer(): Player {
+fun Array<Array<Player?>>.checkIfAllLineIsSamePlayer(): Player? {
   forEach { line ->
     if (line.all { it is Player.A } && line.size == 3) return Player.A
     else if (line.all { it is Player.B } && line.size == 3) return Player.B
   }
-  return Player.None
+  return null
 }
 
 fun Array<Array<Player?>>.switchColumnToLine(): Array<Array<Player?>> {
@@ -21,14 +21,14 @@ fun Array<Array<Player?>>.switchColumnToLine(): Array<Array<Player?>> {
   return convertedLines
 }
 
-fun Array<Array<Player?>>.checkXLinedIsSamePlayer(): Player {
+fun Array<Array<Player?>>.checkXLinedIsSamePlayer(): Player? {
   val winner: Player? = this[1][1]
 
   // center is null, no body win in X
-  winner ?: return Player.None
+  winner ?: return null
 
   var backward = false
-  var checkedWinner: Player = Player.None
+  var checkedWinner: Player? = null
   for (i in 0 until 2) {
     for (j in 0 until 3) {
       // ignore center player check
@@ -36,12 +36,12 @@ fun Array<Array<Player?>>.checkXLinedIsSamePlayer(): Player {
       // find next move of X checks
       val k = if (backward) 2 - j else j
       if (this[j][k] != winner) {
-        checkedWinner = Player.None
+        checkedWinner = null
         break
       } else checkedWinner = winner
     }
-    if (checkedWinner != Player.None) return checkedWinner
+    if (checkedWinner != null) return checkedWinner
     backward = true
   }
-  return Player.None
+  return null
 }

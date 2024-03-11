@@ -43,7 +43,7 @@ class UtilsTest {
     board.forEachIndexed { _, line ->
       line[0] = Player.A
     }
-    assertEquals(Player.None, board.checkIfAllLineIsSamePlayer())
+    assertEquals(null, board.checkIfAllLineIsSamePlayer())
     val converted = board.switchColumnToLine()
     assertEquals(Player.A, converted.checkIfAllLineIsSamePlayer())
   }
