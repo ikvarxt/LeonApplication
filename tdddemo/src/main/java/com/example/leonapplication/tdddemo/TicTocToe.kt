@@ -58,21 +58,19 @@ class TicTocToe(boardSize: Int = BOARD_SIZE) {
       throw RuntimeException("y outside!")
     }
     if (board[x][y] != null) {
-      throw IllegalArgumentException("position has been taken, ($x,$y)")
+      throw IllegalArgumentException("position ($x,$y) has been taken by ${board[x][y]}")
     }
   }
 
-  fun display(): String {
-    val sb = StringBuilder()
+  fun display() = with(StringBuilder()) {
     board.forEachIndexed { index, lines ->
       lines.forEach { player ->
-        sb.append("| ${player?.name ?: " "} ")
+        append("| ${player?.name ?: " "} ")
       }
-      sb.append("|")
-      if (index == board.lastIndex) return sb.toString()
-      sb.append("\n")
-      sb.append("-------------\n")
+      append("|")
+      if (index == board.lastIndex) return toString()
+      append("\n")
+      append("-------------\n")
     }
-    return sb.toString()
-  }
+  }.toString()
 }
