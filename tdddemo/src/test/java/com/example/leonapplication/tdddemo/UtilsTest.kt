@@ -1,5 +1,8 @@
 package com.example.leonapplication.tdddemo
 
+import com.example.leonapplication.tdddemo.Board.Companion.checkIfAllLineIsSamePlayer
+import com.example.leonapplication.tdddemo.Board.Companion.checkXLinedIsSamePlayer
+import com.example.leonapplication.tdddemo.Board.Companion.switchColumnToLine
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -11,7 +14,7 @@ class UtilsTest {
 
   @Before
   fun setup() {
-    board = emptyBoard()
+    board = Board.new().boardArray
   }
 
   @Test

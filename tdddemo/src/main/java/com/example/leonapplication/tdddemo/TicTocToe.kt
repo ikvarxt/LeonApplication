@@ -14,7 +14,7 @@ internal fun Player.next() = when (this) {
 
 class TicTocToe(boardSize: Int = BOARD_SIZE) {
 
-  private val board = emptyBoard(boardSize)
+  private val board = Board.new(boardSize)
   var nextPlayer: Player = Player.A
     private set
   var winner: Player? = null
@@ -26,51 +26,15 @@ class TicTocToe(boardSize: Int = BOARD_SIZE) {
     if (hasWinner) {
       throw IllegalStateException("Player $winner already win")
     }
-    checkIllegalMove(x, y)
+    board.checkIllegalMove(x, y)
 
-    board[x][y] = nextPlayer
+    board.put(x, y, nextPlayer)
 
-    winner = checkIsWin()
+    winner = board.checkIsWin()
     if (hasWinner) return
 
     nextPlayer = nextPlayer.next()
   }
 
-  private fun checkIsWin(): Player? {
-    var checkWinner: Player? = board.checkIfAllLineIsSamePlayer()
-    if (checkWinner != null) return checkWinner
-
-    val convertedLine = board.switchColumnToLine()
-    checkWinner = convertedLine.checkIfAllLineIsSamePlayer()
-    if (checkWinner != null) return checkWinner
-
-    checkWinner = board.checkXLinedIsSamePlayer()
-    if (checkWinner != null) return checkWinner
-
-    return null
-  }
-
-  private fun checkIllegalMove(x: Int, y: Int) {
-    if (x !in 0..2) {
-      throw RuntimeException("x outside!")
-    }
-    if (y !in 0..2) {
-      throw RuntimeException("y outside!")
-    }
-    if (board[x][y] != null) {
-      throw IllegalArgumentException("position ($x,$y) has been taken by ${board[x][y]}")
-    }
-  }
-
-  fun display() = with(StringBuilder()) {
-    board.forEachIndexed { index, lines ->
-      lines.forEach { player ->
-        append("| ${player?.name ?: " "} ")
-      }
-      append("|")
-      if (index == board.lastIndex) return toString()
-      append("\n")
-      append("-------------\n")
-    }
-  }.toString()
+  fun display() = board.display()
 }
