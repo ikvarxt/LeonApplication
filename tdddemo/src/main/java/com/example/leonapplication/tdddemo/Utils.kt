@@ -1,7 +1,7 @@
 package com.example.leonapplication.tdddemo
 
 
-fun emptyBoard() = arrayOf<Array<Player?>>(arrayOfNulls(3), arrayOfNulls(3), arrayOfNulls(3))
+fun emptyBoard(size: Int = 3) = Array<Array<Player?>>(size) { arrayOfNulls(size) }
 
 fun Array<Array<Player?>>.checkIfAllLineIsSamePlayer(): Player? {
   forEach { line ->
@@ -12,7 +12,8 @@ fun Array<Array<Player?>>.checkIfAllLineIsSamePlayer(): Player? {
 }
 
 fun Array<Array<Player?>>.switchColumnToLine(): Array<Array<Player?>> {
-  val convertedLines = emptyBoard()
+  val size = this.size
+  val convertedLines = emptyBoard(size)
   (0 until 3).forEach { i ->
     (0 until 3).forEach { l ->
       convertedLines[i][l] = this[l][i]
