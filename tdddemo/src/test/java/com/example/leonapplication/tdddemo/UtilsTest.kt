@@ -55,6 +55,16 @@ class UtilsTest {
         if (index == it) line[it] = Player.B
       }
     }
+    assertEquals(Player.B, board.checkXLinedIsSamePlayer())
+  }
 
+  @Test
+  fun testBackslashDirectionXLine() {
+    board.forEach { lines ->
+      (2 downTo 0).forEach { i ->
+        lines[i] = Player.B
+      }
+    }
+    assertEquals(Player.B, board.checkXLinedIsSamePlayer())
   }
 }
