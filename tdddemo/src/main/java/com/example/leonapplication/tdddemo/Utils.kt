@@ -14,8 +14,8 @@ fun Array<Array<Player?>>.checkIfAllLineIsSamePlayer(): Player? {
 fun Array<Array<Player?>>.switchColumnToLine(): Array<Array<Player?>> {
   val size = this.size
   val convertedLines = emptyBoard(size)
-  (0 until 3).forEach { i ->
-    (0 until 3).forEach { l ->
+  (0 until size).forEach { i ->
+    (0 until size).forEach { l ->
       convertedLines[i][l] = this[l][i]
     }
   }
@@ -23,19 +23,21 @@ fun Array<Array<Player?>>.switchColumnToLine(): Array<Array<Player?>> {
 }
 
 fun Array<Array<Player?>>.checkXLinedIsSamePlayer(): Player? {
-  val winner: Player? = this[1][1]
+  val size = this.size
 
-  // center is null, no body win in X
-  winner ?: return null
+  val winner: Player? = if (size % 2 != 0) {
+    // center is null, no body win in X
+    this[size / 2][size / 2] ?: return null
+  } else null
 
   var backward = false
   var checkedWinner: Player? = null
+  // check both slash direction and backslash direction
   for (i in 0 until 2) {
-    for (j in 0 until 3) {
-      // ignore center player check
-      if (j == 1) continue
+    for (j in 0 until size) {
+      // if (j == size / 2) continue // ignore center player check
       // find next move of X checks
-      val k = if (backward) 2 - j else j
+      val k = if (backward) lastIndex - j else j
       if (this[j][k] != winner) {
         checkedWinner = null
         break
