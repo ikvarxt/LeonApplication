@@ -36,6 +36,11 @@ dependencies {
   implementation(libs.google.material)
   implementation(libs.constraintlayout)
   implementation(libs.androidx.tracing)
+  implementation(libs.timber)
+
+  implementation(platform(libs.okhttp.bom))
+  implementation(libs.okhttp)
+
   testImplementation(libs.junit)
   androidTestImplementation(libs.androidx.junit.ktx)
   androidTestImplementation(libs.androidx.test.ext.junit)

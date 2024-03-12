@@ -1,9 +1,9 @@
 package com.example.leonapplication.webviewdemo
 
 import android.app.Activity
-import android.util.Log
 import android.webkit.WebView
 import androidx.tracing.trace
+import timber.log.Timber
 
 class WebViewManager {
 
@@ -14,17 +14,17 @@ class WebViewManager {
       trace("getWebView") {
         webView = WebView(activity)
       }
+      Timber.d("webView created")
     }
     return webView!!
   }
 
   fun loadUrl(url: String) {
-    webView?.loadUrl(url) ?: run {
-      Log.e(TAG, "loadUrl: webView is null")
+    if (url.isEmpty()) {
+      Timber.e("loadUrl: webView is null")
+      return
     }
-  }
-
-  companion object {
-    private const val TAG = "WebViewManager"
+    webView?.loadUrl(url)
+    Timber.d("loadUrl loading")
   }
 }
