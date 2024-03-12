@@ -1,6 +1,7 @@
 [versions]
 ## build version
 minSdk = "29"
+targetSdk = "34"
 ## plugins
 android-plugin = "8.2.0"
 android-kotlin = "1.9.0"

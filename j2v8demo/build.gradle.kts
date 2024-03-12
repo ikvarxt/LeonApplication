@@ -5,10 +5,10 @@ plugins {
 
 android {
   namespace = "me.ikvarxt.leonapplicaion.j2v8demo"
-  compileSdk = 34
+  compileSdk = libs.versions.targetSdk.get().toInt()
 
   defaultConfig {
-    minSdk = 29
+    minSdk = libs.versions.minSdk.get().toInt()
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     consumerProguardFiles("consumer-rules.pro")

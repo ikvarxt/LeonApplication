@@ -1,4 +1,3 @@
-@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
   alias(libs.plugins.android.library)
   alias(libs.plugins.android.kotlin)
@@ -6,10 +5,10 @@ plugins {
 
 android {
   namespace = "com.example.leonapplication.webviewdemo"
-  compileSdk = 34
+  compileSdk = libs.versions.targetSdk.get().toInt()
 
   defaultConfig {
-    minSdk = 29
+    minSdk = libs.versions.minSdk.get().toInt()
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     consumerProguardFiles("consumer-rules.pro")
