@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-  namespace = "me.ikvarxt.leonapplicaion.j2v8demo"
+  namespace = "com.example.leonapplicaion.j2v8demo"
   compileSdk = libs.versions.targetSdk.get().toInt()
 
   defaultConfig {
