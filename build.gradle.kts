@@ -5,6 +5,7 @@ plugins {
   alias(libs.plugins.android.library) apply false
   alias(libs.plugins.spotless) apply false
   alias(libs.plugins.kover) apply false
+  alias(libs.plugins.ksp) apply false
 }
 
 subprojects {

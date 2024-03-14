@@ -18,9 +18,9 @@ dependencyResolutionManagement {
 rootProject.name = "LeonApplicationPublic"
 
 include(":app")
-include(":asmdemo")
-includeBuild("asmdemo-build-logic")
-include(":floatwindowdemo")
-include(":j2v8demo")
+//include(":asmdemo")
+//includeBuild("asmdemo-build-logic")
+//include(":floatwindowdemo")
+//include(":j2v8demo")
 include(":webviewdemo")
-include(":tdddemo")
+//include(":tdddemo")

@@ -4,7 +4,6 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
@@ -18,17 +17,26 @@ class MyWebViewClient(
   private val httpClient: OkHttpClient,
 ) : WebViewClient() {
 
-  override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest?): WebResourceResponse? {
-    request ?: return null
+  override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? {
 
     val url = request.url.toString()
     val mimeType = getMimeTypeFromUrl(url) ?: return null
     val builder = Request.Builder()
       .url(url)
-    // construct a 403 Not Modified code
+    // construct a 403 Not Modified response
     if (url.contains("css")) {
       builder.addHeader("If-Modified-Since", "Tue, 21 Nov 2050 08:00:00 GMT")
     }
+    // TODO: bug occurs
+    //  1. not all image loaded by Glide
+    //  2. may load failed with exception
+    // get image by Glide
+    getBitmapFormatFromMime(mimeType)?.let { format ->
+      Timber.d("glide load $url format ${format.name}")
+      val inputStream = view.loadBitmapFor(url).asInputSteam(format)
+      return WebResourceResponse(mimeType, coding, inputStream)
+    }
+
     val response: Response
     val requestTime = measureTime {
       try {
@@ -58,13 +66,4 @@ class MyWebViewClient(
     val stream = response.body?.byteStream() ?: return null
     return WebResourceResponse(mimeType, coding, stream)
   }
-}
-
-fun provideHttpClient(): OkHttpClient {
-  val cache = httpClientCacheFolder?.let { folder ->
-    Cache(folder, 100 * 1024 * 1024)
-  }
-  return OkHttpClient.Builder().apply {
-    cache(cache)
-  }.build()
 }

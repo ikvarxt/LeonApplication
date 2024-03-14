@@ -1,6 +1,7 @@
 plugins {
   alias(libs.plugins.android.library)
   alias(libs.plugins.android.kotlin)
+  alias(libs.plugins.ksp)
 }
 
 android {
@@ -36,10 +37,10 @@ dependencies {
   implementation(libs.constraintlayout)
   implementation(libs.androidx.tracing)
   implementation(libs.timber)
-
   implementation(platform(libs.okhttp.bom))
   implementation(libs.okhttp)
-
+  implementation(libs.glide)
+  ksp(libs.glide.ksp)
   testImplementation(libs.junit)
   androidTestImplementation(libs.androidx.junit.ktx)
   androidTestImplementation(libs.androidx.test.ext.junit)
