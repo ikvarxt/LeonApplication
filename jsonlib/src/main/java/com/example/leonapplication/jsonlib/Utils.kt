@@ -1,5 +1,7 @@
 package com.example.leonapplication.jsonlib
 
+import java.lang.reflect.ParameterizedType
+import java.lang.reflect.Type
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty1
 import kotlin.reflect.full.memberProperties
@@ -30,3 +32,18 @@ internal val <T : Any> KClass<T>.sortedMemberProperties: Collection<KProperty1<T
     .let { orderById ->
       memberProperties.sortedBy { orderById[it.name] }
     }
+
+fun Type.isPrimitiveOrString(): Boolean {
+  val cls = this as? Class<*> ?: return false
+  return cls.kotlin.javaPrimitiveType != null || cls == String::class.java
+}
+
+
+@Suppress("UNCHECKED_CAST")
+fun Type.asJavaClass(): Class<Any> = when (this) {
+  is Class<*> -> this as Class<Any>
+  is ParameterizedType -> rawType as? Class<Any>
+    ?: throw UnsupportedOperationException("Unknown type $this")
+
+  else -> throw UnsupportedOperationException("Unknown type $this")
+}

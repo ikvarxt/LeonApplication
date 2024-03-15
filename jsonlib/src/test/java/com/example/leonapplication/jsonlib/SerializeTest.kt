@@ -57,9 +57,6 @@ class SerializeTest {
 
     val json: String
     measureTime {
-      repeat(30) {
-        val a = serialize(bean)
-      }
       json = serialize(bean)
     }.logTime("serialize")
 

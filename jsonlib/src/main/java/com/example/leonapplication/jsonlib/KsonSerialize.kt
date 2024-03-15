@@ -1,7 +1,10 @@
 package com.example.leonapplication.jsonlib
 
 import kotlin.reflect.KClass
+import kotlin.reflect.KProperty
 import kotlin.reflect.KProperty1
+import kotlin.reflect.full.createInstance
+import kotlin.reflect.full.findAnnotation
 
 fun serialize(obj: Any): String = buildString { serializeObject(obj) }
 
@@ -34,6 +37,16 @@ private fun StringBuilder.serializeObject(obj: Any) {
     append(INDICATOR)
     serializePropertyValue(prop.call(obj))
   }
+}
+
+fun KProperty<*>.getSerializer(): ValueSerializer<Any?>? {
+  val customSerializerAnn = findAnnotation<CustomSerializer>() ?: return null
+  val serializerClass = customSerializerAnn.serializerClass
+
+  val valueSerializer = serializerClass.objectInstance
+    ?: serializerClass.createInstance()
+  @Suppress("UNCHECKED_CAST")
+  return valueSerializer as ValueSerializer<Any?>
 }
 
 private fun StringBuilder.serializePropertyValue(obj: Any?) {
