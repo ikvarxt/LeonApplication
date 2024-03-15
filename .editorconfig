@@ -5,6 +5,8 @@ indent_size = 2
 indent_style = space
 end_of_line = lf
 charset = utf-8
+max_line_length = 120
 
 [*.kt]
 ij_kotlin_allow_trailing_comma = true
+ij_kotlin_method_annotation_wrap = normal
