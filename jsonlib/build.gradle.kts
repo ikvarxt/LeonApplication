@@ -27,10 +27,17 @@ android {
   kotlinOptions {
     jvmTarget = "1.8"
   }
+  @Suppress("UnstableApiUsage")
+  android.testOptions {
+    unitTests.all {
+      it.useJUnitPlatform()
+    }
+  }
 }
 
 dependencies {
   implementation(kotlin("reflect"))
   implementation(libs.gson)
-  testImplementation(libs.junit)
+  testImplementation(libs.kotest)
+  testImplementation(libs.kotest.assertions)
 }

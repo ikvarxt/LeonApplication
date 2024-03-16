@@ -1,59 +1,60 @@
 package com.example.leonapplication.jsonlib
 
 import com.example.leonapplication.jsonlib.deserialize.deserialize
-import org.junit.Assert.assertEquals
-import org.junit.Test
+import io.kotest.core.spec.style.FunSpec
+import io.kotest.matchers.shouldBe
 
-class DeserializeTest {
+class DeserializeTest : FunSpec({
 
-  @Test fun testEntityBean() {
+  test("EntityBean") {
     val json = """{"name": "leon", "age": 24}"""
     val obj = deserialize<PersonBean>(json)
-    assertEquals("leon", obj.name)
+    obj.name shouldBe "leon"
   }
 
-  @Test fun testInt() {
+  test("Int") {
     val json = """{"i": 24}"""
     val obj = deserialize<IntBean>(json)
-    assertEquals(24, obj.i)
+    obj.i shouldBe 24
   }
 
-  @Test fun testDouble() {
+  test("Double") {
     val json = """{"d": 24.24, "f": 0.24}"""
     val obj = deserialize<DoubleBean>(json)
-    assertEquals(24.24, obj.d, 0.00003)
-    assertEquals(0.24f, obj.f, 0.00003f)
+    obj.d shouldBe 24.24
+    obj.f shouldBe 0.24f
   }
 
-  @Test fun testString() {
+  test("String") {
     val json = """{"s": "leon"}"""
     val obj = deserialize<StringBean>(json)
-    assertEquals("leon", obj.s)
+    obj.s shouldBe "leon"
   }
 
-  @Test fun testLong() {
+  test("Long") {
     val json = """{"l": 24}"""
     val obj = deserialize<LongBean>(json)
-    assertEquals(24L, obj.l)
+    obj.l shouldBe 24L
   }
 
-  @Test fun testObject() {
+  test("Object") {
     val json = """{"o": {"s": "leon"}}"""
     val obj = deserialize<ObjectBean>(json)
-    assertEquals(StringBean("leon"), obj.o)
+    obj.o shouldBe StringBean("leon")
   }
 
-  @Test fun testListBean() {
+  test("ListBean") {
     val bean = ListBean(listOf("abc", "cde"))
 
     val json = """{"l":["abc","cde"]}"""
     val obj = deserialize<ListBean>(json)
-    assertEquals(bean.l, obj.l)
+    obj.l shouldBe bean.l
   }
 
-  @Test fun testRawList() {
+  test("RawList") {
     val json = """["abc", "bcd"]"""
     val obj = deserialize<List<String>>(json)
-    assertEquals(listOf("abc", "bcd"), obj)
+    obj shouldBe listOf("abc", "bcd")
   }
 }
+)

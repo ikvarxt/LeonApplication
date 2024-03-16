@@ -1,88 +1,80 @@
 package com.example.leonapplication.jsonlib
 
 import com.google.gson.Gson
-import org.junit.Assert.assertEquals
-import org.junit.Test
+import io.kotest.core.spec.style.FunSpec
+import io.kotest.matchers.shouldBe
 import kotlin.time.Duration
 import kotlin.time.measureTime
 import com.example.leonapplication.jsonlib.serialize as libSerialize
 
 private val gson = Gson()
 private fun Duration.logTime(tag: String) = println("$tag time is $this")
+private const val gsonTest = false
 
-class SerializeTest {
+class SerializeTest : FunSpec({
 
-  private val gsonTest = false
+  fun serialize(obj: Any) = if (gsonTest) gson.toJson(obj) else libSerialize(obj)
 
-  private fun serialize(obj: Any) = if (gsonTest) gson.toJson(obj) else libSerialize(obj)
-
-  @Test fun testEntityBean() {
+  test("EntityBean") {
     val person = PersonBean("Leon", 24)
-    assertEquals("""{"name":"Leon","age":24}""", serialize(person))
+    serialize(person) shouldBe """{"name":"Leon","age":24}"""
   }
 
-  @Test fun testString() {
+  test("String") {
     val sBean = StringBean("leon")
     val json = serialize(sBean)
-    assertEquals("""{"s":"leon"}""", json)
+    json shouldBe """{"s":"leon"}"""
   }
 
-  @Test fun testInt() {
+  test("Int") {
     val bean = IntBean(2)
-    assertEquals("""{"i":2}""", serialize(bean))
+    serialize(bean) shouldBe """{"i":2}"""
   }
 
-  @Test
-  fun testLong() {
+  test("Long") {
     val bean = LongBean(1L)
-    assertEquals("""{"l":1}""", serialize(bean))
+    serialize(bean) shouldBe """{"l":1}"""
   }
 
-  @Test
-  fun testFloatNumber() {
+  test("FloatNumber") {
     val bean = DoubleBean(1.1, 1.2f)
-    assertEquals("""{"d":1.1,"f":1.2}""", serialize(bean))
+    serialize(bean) shouldBe """{"d":1.1,"f":1.2}"""
   }
 
-  @Test
-  fun testNull() {
+  test("Null") {
     val bean = NullableBean(null)
     val json = if (gsonTest) """{}""" else """{"n":null}"""
-    assertEquals(json, serialize(bean))
+    serialize(bean) shouldBe json
   }
 
-  @Test
-  fun testListBean() {
+  test("ListBean") {
     val bean = ListBean(listOf("abc", "cde"))
 
     val json: String
     measureTime {
       json = serialize(bean)
-    }.logTime("serialize")
+    }.logTime("")
 
-    assertEquals("""{"l":["abc","cde"]}""", json)
+    json shouldBe """{"l":["abc","cde"]}"""
   }
 
-  @Test
-  fun testRawList() {
+  test("RawList") {
     val bean = listOf(true, "abc")
-    assertEquals("""[true,"abc"]""", serialize(bean))
+    serialize(bean) shouldBe """[true,"abc"]"""
   }
 
-  @Test
-  fun testObjectBean() {
+  test("ObjectBean") {
     val bean = ObjectBean(StringBean("leon"))
-    assertEquals("""{"o":{"s":"leon"}}""", serialize(bean))
+    serialize(bean) shouldBe """{"o":{"s":"leon"}}"""
   }
 
-  @Test
-  fun testMultiLineString() {
+  test("MultiLineString") {
     val bean = StringBean(
       """
       abcd
       cdd
       """.trimIndent()
     )
-    assertEquals("""{"s":"abcd\ncdd"}""", serialize(bean))
+    serialize(bean) shouldBe """{"s":"abcd\ncdd"}"""
   }
-}
+})
