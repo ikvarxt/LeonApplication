@@ -1,7 +1,6 @@
 package com.example.leonapplication.jsonlib
 
 
-import com.example.leonapplication.jsonlib.deserialize.JKidException
 import java.lang.reflect.Type
 
 fun serializerForBasicType(type: Type): ValueSerializer<out Any?> {

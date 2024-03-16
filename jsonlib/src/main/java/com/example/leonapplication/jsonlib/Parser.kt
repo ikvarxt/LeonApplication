@@ -1,4 +1,4 @@
-package com.example.leonapplication.jsonlib.deserialize
+package com.example.leonapplication.jsonlib
 
 import java.io.Reader
 

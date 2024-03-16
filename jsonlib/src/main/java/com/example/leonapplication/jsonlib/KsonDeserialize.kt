@@ -1,8 +1,5 @@
-package com.example.leonapplication.jsonlib.deserialize
+package com.example.leonapplication.jsonlib
 
-import com.example.leonapplication.jsonlib.asJavaClass
-import com.example.leonapplication.jsonlib.isPrimitiveOrString
-import com.example.leonapplication.jsonlib.serializerForBasicType
 import java.io.Reader
 import java.io.StringReader
 import java.lang.reflect.ParameterizedType

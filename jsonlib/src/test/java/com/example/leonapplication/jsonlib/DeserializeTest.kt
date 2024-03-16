@@ -1,6 +1,5 @@
 package com.example.leonapplication.jsonlib
 
-import com.example.leonapplication.jsonlib.deserialize.deserialize
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 

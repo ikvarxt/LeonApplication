@@ -1,10 +1,5 @@
-package com.example.leonapplication.jsonlib.deserialize
+package com.example.leonapplication.jsonlib
 
-import com.example.leonapplication.jsonlib.DeserializeInterface
-import com.example.leonapplication.jsonlib.JsonName
-import com.example.leonapplication.jsonlib.ValueSerializer
-import com.example.leonapplication.jsonlib.getSerializer
-import com.example.leonapplication.jsonlib.serializerForType
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
 import kotlin.reflect.full.declaredMemberProperties
