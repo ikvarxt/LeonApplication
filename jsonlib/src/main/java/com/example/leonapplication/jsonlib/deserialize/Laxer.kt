@@ -55,7 +55,7 @@ internal class CharReader(private val reader: Reader) {
     return if (eof) null else nextChar
   }
 
-  fun readNext() = peekNext().apply { nextChar = null }
+  fun readNext() = peekNext().also { nextChar = null }
 
   fun readNextChars(length: Int): String {
     assert(nextChar == null)
@@ -133,9 +133,9 @@ class Lexer(reader: Reader) {
 
           else -> throw MalformedJSONException("Unsupported escape sequence \\$escaped")
         }
-      } else {
-        result.append(c)
+        continue
       }
+      result.append(c)
     }
     return Token.StringValue(result.toString())
   }

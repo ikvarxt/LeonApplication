@@ -10,19 +10,17 @@ import java.lang.reflect.Type
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
 import kotlin.reflect.javaType
+import kotlin.reflect.typeOf
 
 inline fun <reified T : Any> deserialize(json: String): T {
   return deserialize(StringReader(json))
 }
 
+@OptIn(ExperimentalStdlibApi::class)
 inline fun <reified T : Any> deserialize(json: Reader): T {
-  return deserialize(json, T::class)
-}
-
-fun <T : Any> deserialize(json: Reader, targetClass: KClass<T>): T {
-  val seed = ObjectSeed(targetClass, ClassInfoCache())
+  val seed = ClassCacheHolder.createSeedFor(typeOf<T>().javaType)
   Parser(json, seed).parse()
-  return seed.spawn()
+  return seed.spawn() as T
 }
 
 interface JsonObject {
@@ -33,22 +31,28 @@ interface JsonObject {
   fun createArray(propName: String): JsonObject
 }
 
-interface Seed : JsonObject {
+interface IClassCacheHolder {
   val classInfoCache: ClassInfoCache
+}
+
+interface Seed : JsonObject, IClassCacheHolder {
 
   fun spawn(): Any?
-
   fun createCompositeProperty(propertyName: String, isList: Boolean): JsonObject
 
   override fun createArray(propName: String): JsonObject = createCompositeProperty(propName, true)
   override fun createObject(propName: String): JsonObject = createCompositeProperty(propName, false)
 }
 
-fun Seed.createSeedForType(paramType: Type, isList: Boolean): Seed {
+object ClassCacheHolder : IClassCacheHolder {
+  override val classInfoCache: ClassInfoCache = ClassInfoCache()
+}
+
+fun IClassCacheHolder.createSeedFor(paramType: Type, isList: Boolean? = null): Seed {
   val paramClass = paramType.asJavaClass()
 
   if (List::class.java.isAssignableFrom(paramClass)) {
-    if (isList.not()) throw JKidException("An array expected, not a composite object")
+    if (isList?.not() == true) throw JKidException("An array expected, not a composite object")
     val parameterizedType = paramType as? ParameterizedType
       ?: throw UnsupportedOperationException("Unsupported parameter type $this")
 
@@ -58,7 +62,7 @@ fun Seed.createSeedForType(paramType: Type, isList: Boolean): Seed {
     }
     return ObjectListSeed(elementType, classInfoCache)
   }
-  if (isList) throw JKidException("Object of the type ${paramType.typeName} expected, not an array")
+  if (isList == true) throw JKidException("Object of the type ${paramType.typeName} expected, not an array")
   return ObjectSeed(paramClass.kotlin, classInfoCache)
 }
 
@@ -81,7 +85,7 @@ class ObjectSeed<out T : Any>(
   override fun createCompositeProperty(propertyName: String, isList: Boolean): JsonObject {
     val param = classInfo.getConstructorParameter(propertyName)
     val deserializeAs = classInfo.getDeserializeClass(propertyName)
-    val seed = createSeedForType(deserializeAs ?: param.type.javaType, isList)
+    val seed = createSeedFor(deserializeAs ?: param.type.javaType, isList)
     return seed.apply { seedParameters[param] = this }
   }
 
@@ -103,7 +107,7 @@ class ObjectListSeed(
   }
 
   override fun createCompositeProperty(propertyName: String, isList: Boolean): JsonObject {
-    return createSeedForType(elementType, isList).apply { elements.add(this) }
+    return createSeedFor(elementType, isList).also { elements.add(it) }
   }
 
   override fun spawn(): List<*> = elements.map { it.spawn() }

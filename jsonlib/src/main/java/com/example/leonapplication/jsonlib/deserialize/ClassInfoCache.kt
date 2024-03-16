@@ -38,6 +38,7 @@ class ClassInfo<T : Any>(cls: KClass<T>) {
     val paramName = param.name
       ?: throw JKidException("Class $className has constructor parameter without name")
 
+    // find property in constructor's parameters
     val property = cls.declaredMemberProperties.find { it.name == paramName } ?: return
     val name = property.findAnnotation<JsonName>()?.name ?: paramName
     jsonNameToParamMap[name] = param

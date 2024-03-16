@@ -43,7 +43,7 @@ class DeserializeTest {
     assertEquals(StringBean("leon"), obj.o)
   }
 
-  @Test fun testList() {
+  @Test fun testListBean() {
     val bean = ListBean(listOf("abc", "cde"))
 
     val json = """{"l":["abc","cde"]}"""
@@ -51,10 +51,9 @@ class DeserializeTest {
     assertEquals(bean.l, obj.l)
   }
 
-  // not support raw list type
-  // @Test fun testRawList() {
-  //   val json = """["abc", "bcd"]"""
-  //   val obj = deserialize<ArrayList<String>>(json)
-  //   assertEquals(listOf("abc", "bcd"), obj)
-  // }
+  @Test fun testRawList() {
+    val json = """["abc", "bcd"]"""
+    val obj = deserialize<List<String>>(json)
+    assertEquals(listOf("abc", "bcd"), obj)
+  }
 }

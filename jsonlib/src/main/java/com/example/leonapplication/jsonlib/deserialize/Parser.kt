@@ -6,8 +6,11 @@ class Parser(reader: Reader, private val rootObject: JsonObject) {
   private val lexer = Lexer(reader)
 
   fun parse() {
-    expect(Token.LBRACE)
-    parseObjectBody(rootObject)
+    when (lexer.nextToken()) {
+      Token.LBRACE -> parseObjectBody(rootObject)
+      Token.LBRACKET -> parseArrayBody(rootObject, "")
+      else -> throw MalformedJSONException("expected start with '{' or '['")
+    }
     if (lexer.nextToken() != null) {
       throw IllegalArgumentException("Too many tokens")
     }
