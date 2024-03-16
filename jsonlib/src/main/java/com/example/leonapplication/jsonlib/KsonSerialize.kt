@@ -26,7 +26,7 @@ private fun StringBuilder.serializeObject(obj: Any) {
   val kClass = obj.javaClass.kotlin
   val members = classCache.getOrPut(kClass) {
     kClass.sortedMemberProperties
-  }
+  }.filter { it.findAnnotation<JsonExclude>() == null }
   members.joinToStringBuilder(
     this,
     separator = SEPARATOR,

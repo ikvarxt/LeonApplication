@@ -1,7 +1,7 @@
 package com.example.leonapplication.jsonlib
 
 import com.google.gson.Gson
-import io.kotest.core.spec.style.FunSpec
+import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import kotlin.time.Duration
 import kotlin.time.measureTime
@@ -11,43 +11,43 @@ private val gson = Gson()
 private fun Duration.logTime(tag: String) = println("$tag time is $this")
 private const val gsonTest = false
 
-class SerializeTest : FunSpec({
+class SerializeTest : StringSpec({
 
   fun serialize(obj: Any) = if (gsonTest) gson.toJson(obj) else libSerialize(obj)
 
-  test("EntityBean") {
+  "EntityBean" {
     val person = PersonBean("Leon", 24)
     serialize(person) shouldBe """{"name":"Leon","age":24}"""
   }
 
-  test("String") {
+  "String" {
     val sBean = StringBean("leon")
     val json = serialize(sBean)
     json shouldBe """{"s":"leon"}"""
   }
 
-  test("Int") {
+  "Int" {
     val bean = IntBean(2)
     serialize(bean) shouldBe """{"i":2}"""
   }
 
-  test("Long") {
+  "Long" {
     val bean = LongBean(1L)
     serialize(bean) shouldBe """{"l":1}"""
   }
 
-  test("FloatNumber") {
+  "FloatNumber" {
     val bean = DoubleBean(1.1, 1.2f)
     serialize(bean) shouldBe """{"d":1.1,"f":1.2}"""
   }
 
-  test("Null") {
+  "Null" {
     val bean = NullableBean(null)
     val json = if (gsonTest) """{}""" else """{"n":null}"""
     serialize(bean) shouldBe json
   }
 
-  test("ListBean") {
+  "ListBean" {
     val bean = ListBean(listOf("abc", "cde"))
 
     val json: String
@@ -58,17 +58,17 @@ class SerializeTest : FunSpec({
     json shouldBe """{"l":["abc","cde"]}"""
   }
 
-  test("RawList") {
+  "RawList" {
     val bean = listOf(true, "abc")
     serialize(bean) shouldBe """[true,"abc"]"""
   }
 
-  test("ObjectBean") {
+  "ObjectBean" {
     val bean = ObjectBean(StringBean("leon"))
     serialize(bean) shouldBe """{"o":{"s":"leon"}}"""
   }
 
-  test("MultiLineString") {
+  "MultiLineString" {
     val bean = StringBean(
       """
       abcd
@@ -76,5 +76,10 @@ class SerializeTest : FunSpec({
       """.trimIndent()
     )
     serialize(bean) shouldBe """{"s":"abcd\ncdd"}"""
+  }
+
+  "exclude json name" {
+    val bean = ExcludeBean("eee")
+    serialize(bean) shouldBe "{}"
   }
 })
