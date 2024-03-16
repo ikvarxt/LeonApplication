@@ -1,0 +1,79 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+interface JsonObject{
+  setSimpleProperty(name, value)
+
+  createObject(name)
+  createArray(name)
+}
+
+interface Seed {
+  classInfoCache: ClassInfoCache
+
+  createCompositionObject(name, isList)
+  spawn(): Any?
+
+  +createSeedForType()
+}
+Seed -u-|> JsonObject
+
+class ObjectSeed implements Seed {
+  -val classInfo: ClassInfo
+
+  -val valueParameters: Map<KParameter, Any?>
+  -val seedParameters: Map<KParameter, Seed>
+
+  spawn(): T
+  createCompositeProperty(String, Boolean): JsonObject
+  setSimpleProperty(String, Any?)
+}
+
+class ValueListSeed implements Seed {
+
+  -val elements: List<Any?>
+
+  spawn(): List<Any?>
+  createCompositeProperty(String, Boolean): JsonObject
+  setSimpleProperty(String, Any?)
+}
+
+class ObjectListSeed implements Seed {
+  -val seedElements: List<Seed>
+
+  spawn(): List<*>
+  createCompositeProperty(String, Boolean): JsonObject
+  setSimpleProperty(String, Any?)
+}
+
+interface Token {
+}
+
+class Laxer {
+  -val charReader: CharReader
+  -val tokenMap
+
+  -readStringToken(): Token
+  -readNumberToken(Char): Token
+
+  nextToken(): Token?
+}
+
+class Parser {
+  -val lexer: Lexer
+
+  val root: JsonObject
+
+  parse()
+}
+
+Parser *-- Laxer
+Laxer *-- Token
+
+class Kson {
+  deserialize(json): T
+}
+Parser o-- Kson
+ObjectSeed o-- Kson
+
+@enduml
