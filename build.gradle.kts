@@ -44,6 +44,7 @@ subprojects {
       target("**/*.kt")
       targetExclude("**/build/**/*.kt")
       ktlint(libs.versions.ktlint.get())
+        .setEditorConfigPath(rootProject.file(".editorconfig").path)
         .editorConfigOverride(
           mapOf(
             "ktlint_code_style" to "android_studio",
