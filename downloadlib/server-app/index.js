@@ -23,12 +23,23 @@ app.get('/', (req, res) => {
   res.send(html);
 })
 
+app.get('/getFileSize/:file', (req, res) => {
+  try {
+    const file = req.params.file;
+    const filePath = path.join(dir, file)
+    const fileSize = fs.statSync(filePath).size;
+    res.send(fileSize.toString())
+  } catch (e) {
+    console.error(`get size error: ${e.message}`)
+    res.status(404).send('file not found')
+  }
+})
+
 app.get('/download/:file', (req, res) => {
   const file = req.params.file;
   const filePath = path.join(dir, file)
 
   const fileSize = fs.statSync(filePath).size;
-  console.log(`file size: ${fileSize}`)
 
   // Get the Range header value
   const rangeHeader = req.headers.range;
@@ -41,13 +52,15 @@ app.get('/download/:file', (req, res) => {
       const start = parseInt(partialstart, 10);
       const end = partialend ? parseInt(partialend, 10) : fileSize;
       const chunksize = end - start;
+      console.log(`range req start: ${start} end: ${end} chunksize: ${chunksize}`)
 
       res.range({
         first: start,
         end: end,
         length: chunksize
       })
-      res.sendFile(filePath, { start, end });
+      const buffer = fs.readFileSync(filePath);
+      res.end(buffer.subarray(start, end));
     } catch (e) {
       console.error(`range error: ${e.message}`)
       // Invalid Range header
