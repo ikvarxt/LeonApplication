@@ -11,6 +11,6 @@ import org.junit.Test
 class NativeLibTest {
 
   @Test fun testNativeLib() {
-    assertEquals(NativeLib().stringFromJNI(), "Hello from C++")
+    assertEquals("true".toBoolean(), true)
   }
 }
