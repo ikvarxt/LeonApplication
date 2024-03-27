@@ -42,6 +42,7 @@ app.get('/download/:file', (req, res) => {
   // Get the Range header value
   const rangeHeader = req.headers.range;
   console.log(`range header: ${rangeHeader}`)
+  const buffer = fs.readFileSync(filePath);
 
   if (rangeHeader) {
     try {
@@ -52,7 +53,6 @@ app.get('/download/:file', (req, res) => {
       const chunksize = end - start;
       console.log(`range req start: ${start} end: ${end} chunksize: ${chunksize}`)
 
-      const buffer = fs.readFileSync(filePath);
       res.send(buffer.subarray(start, end));
     } catch (e) {
       console.error(`range error: ${e.message}`)
@@ -60,12 +60,7 @@ app.get('/download/:file', (req, res) => {
       return res.status(416).send('Range Not Satisfiable');
     }
   } else {
-    res.sendFile(filePath, (err) => {
-      if (err) {
-        console.error(`download error: ${err.message}`)
-        return res.status(404).send('file not found')
-      }
-    })
+    res.send(buffer)
   }
 })
 

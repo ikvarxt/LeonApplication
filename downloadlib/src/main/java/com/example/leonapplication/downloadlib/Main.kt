@@ -11,6 +11,7 @@ import kotlin.math.min
 import kotlin.time.measureTime
 
 private const val threading = true
+private const val chunk = 3
 
 fun main() {
   val client = OkHttpClient()
@@ -19,14 +20,15 @@ fun main() {
   val file = "test-file-1"
 
   val url = "$base/download/$file"
-  val getSizeUrl = "$base/getFileSize/$file"
+  val size: Int
+  val getSizeTime = measureTime {
+    val getSizeUrl = "$base/getFileSize/$file"
+    size = getFileSize(client, getSizeUrl)
+  }
+  println("get file '$file' size ${size / 1024f / 1024f}MB, time $getSizeTime")
 
-  val size = getFileSize(client, getSizeUrl)
-  println("get file '$file' size ${size / 1024f / 1024f}MB")
-
-  val chunk = 3
   val chunkSize = ceil(size / chunk.toFloat()).toInt()
-  val sb = ByteBuffer.allocate(size + 1024)
+  val sb = ByteBuffer.allocate(size)
   val map = HashMap<Int, ByteArray>()
 
   val time = measureTime {
@@ -49,9 +51,9 @@ fun main() {
       sb.put(u)
     }
     map.clear()
+    val res = sb.string()
   }
 
-  val res = sb.string()
   // println("raw: abcdefghijklmnopqresuvwxyz")
   println("download done with $time, chunked $chunk")
   sb.clear()
