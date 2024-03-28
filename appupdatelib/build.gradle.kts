@@ -5,10 +5,10 @@ plugins {
 
 android {
   namespace = "com.example.leonapplication.appupdatelib"
-  compileSdk = 34
+  compileSdk = libs.versions.targetSdk.get().toInt()
 
   defaultConfig {
-    minSdk = 29
+    minSdk = libs.versions.minSdk.get().toInt()
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     consumerProguardFiles("consumer-rules.pro")
@@ -34,6 +34,9 @@ dependencies {
   implementation(libs.androidx.core.ktx)
   implementation(libs.androidx.appcompat)
   implementation(libs.google.material)
+  implementation(platform(libs.okhttp.bom))
+  implementation(libs.okhttp)
+  implementation(libs.timber)
   testImplementation(libs.junit)
   androidTestImplementation(libs.androidx.test.ext.junit)
   androidTestImplementation(libs.androidx.espresso.core)
