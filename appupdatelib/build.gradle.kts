@@ -37,7 +37,9 @@ dependencies {
   implementation(platform(libs.okhttp.bom))
   implementation(libs.okhttp)
   implementation(libs.timber)
+  implementation(libs.gson)
   testImplementation(libs.junit)
+  testImplementation(libs.kotest.assertions)
   androidTestImplementation(libs.androidx.test.ext.junit)
   androidTestImplementation(libs.androidx.espresso.core)
 }

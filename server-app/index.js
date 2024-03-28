@@ -32,6 +32,17 @@ app.get('/getFileSize/:file', (req, res) => {
   }
 })
 
+app.get('/checkUpdate', (req, res) => {
+  return res.json({
+    versionName: "1.1",
+    versionCode: 2,
+    downloadUrl: "http://localhost:8989/download/app-debug-1.2.apk",
+    md5: null,
+    updateMessage: "test update message",
+    forceUpdate: false,
+  })
+})
+
 app.get('/download/:file', (req, res) => {
   const file = req.params.file;
   const filePath = path.join(dir, file)
