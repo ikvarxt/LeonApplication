@@ -1,5 +1,6 @@
 package com.example.leonapplication.app
 
+import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.content.pm.PackageManager
@@ -19,17 +20,17 @@ fun Context.getAllActivities(): List<LaunchEntryActivity>? = try {
   packageManager.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES)
     .activities
     .filter {
-      it.name.startsWith(packageName) and
-        it.name.equals("com.example.leonapplication.MainActivity").not()
+      it.name.startsWith(packageName) and it.name.equals(tryGetActivityName()).not()
     }.map {
-      LaunchEntryActivity(
-        it.name.substring(it.name.lastIndexOf(".") + 1, it.name.length),
-        it.name
-      )
+      LaunchEntryActivity(it.name.substringAfterLast("."), it.name)
     }
 } catch (e: NameNotFoundException) {
   Timber.e(e, "getAllActivities: name not found")
   null
+}
+
+fun Context.tryGetActivityName(): String? {
+  return (this as? Activity)?.componentName?.className
 }
 
 data class LaunchEntryActivity(

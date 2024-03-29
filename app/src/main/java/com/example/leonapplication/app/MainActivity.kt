@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
@@ -32,26 +33,36 @@ class MainActivity : ComponentActivity() {
 
     setContent {
       LeonApplicationTheme {
-        if (activities.isNotEmpty()) {
-          LazyColumn(
-            modifier = Modifier
-              .fillMaxSize()
-              .systemBarsPadding()
-          ) {
-            items(activities) {
-              LaunchComponent(it.name, it.componentClassName)
-            }
-          }
-        } else {
-          Box(modifier = Modifier.fillMaxSize()) {
-            Text(
-              text = "no activities found",
-              style = MaterialTheme.typography.displayMedium,
-              modifier = Modifier.align(Alignment.Center)
-            )
-          }
+        Content(activities = activities)
+      }
+    }
+  }
+}
+
+@Composable
+private fun Content(
+  activities: List<LaunchEntryActivity>,
+  modifier: Modifier = Modifier,
+) {
+  Box(modifier.fillMaxSize()) {
+    if (activities.isNotEmpty()) {
+      LazyColumn(
+        Modifier
+          .fillMaxWidth()
+          .wrapContentHeight()
+          .systemBarsPadding()
+          .align(Alignment.BottomCenter)
+      ) {
+        items(activities) {
+          LaunchComponent(it.name, it.componentClassName)
         }
       }
+    } else {
+      Text(
+        text = "no activities found",
+        style = MaterialTheme.typography.displayMedium,
+        modifier = Modifier.align(Alignment.Center)
+      )
     }
   }
 }
