@@ -65,6 +65,7 @@ internal fun handleAppUpdateIntents(context: Context, intent: Intent?) {
     when (status) {
       PackageInstaller.STATUS_PENDING_USER_ACTION -> {
         // This test app isn't privileged, so the user has to confirm the install.
+        @Suppress("DEPRECATION")
         context.startActivity(extras.get(Intent.EXTRA_INTENT) as? Intent)
       }
 

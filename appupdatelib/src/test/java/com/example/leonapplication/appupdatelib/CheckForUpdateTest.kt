@@ -5,6 +5,7 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import org.junit.Ignore
 import org.junit.Test
 
 
@@ -12,6 +13,7 @@ class CheckForUpdateTest {
 
   private val client = OkHttpClient()
 
+  @Ignore("no server on ci")
   @Test fun whenHaveUpdateThanInfo() {
     val info: AppUpdateInfo
     Request.Builder()
