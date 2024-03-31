@@ -7,13 +7,14 @@
   <application android:usesCleartextTraffic="true">
     <activity
       android:name=".AppUpdateActivity"
+      android:launchMode="singleTop"
       android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
 
     <provider
       android:name="androidx.core.content.FileProvider"
       android:authorities="${applicationId}.fileprovider"
-      android:grantUriPermissions="true"
-      android:exported="false">
+      android:exported="false"
+      android:grantUriPermissions="true">
       <meta-data
         android:name="android.support.FILE_PROVIDER_PATHS"
         android:resource="@xml/filepaths" />

@@ -11,21 +11,16 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
-import android.view.ViewGroup
 import android.webkit.MimeTypeMap
-import android.widget.Button
-import android.widget.LinearLayout
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.updatePadding
 import timber.log.Timber
 import java.io.File
+
 
 class AppUpdateActivity : AppCompatActivity() {
 
@@ -44,6 +39,7 @@ class AppUpdateActivity : AppCompatActivity() {
     else Timber.d("not permit permission")
   }
   private val dm by lazy { getSystemService(DOWNLOAD_SERVICE) as DownloadManager }
+  private val context get() = this
 
   private val receiver = object : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
@@ -70,30 +66,10 @@ class AppUpdateActivity : AppCompatActivity() {
     }
   }
 
-  private val context get() = this
+  override fun onNewIntent(intent: Intent?) {
+    super.onNewIntent(intent)
 
-  private inline fun list(content: LinearLayout.() -> Unit) {
-    LinearLayout(context).apply {
-      orientation = LinearLayout.VERTICAL
-      content()
-      fitsSystemBar()
-    }.also { setContentView(it) }
-  }
-
-  private fun ViewGroup.fitsSystemBar() {
-    ViewCompat.setOnApplyWindowInsetsListener(this) { v, windowInsets ->
-      val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-      v.updatePadding(insets.left, insets.top, insets.right, insets.bottom)
-      WindowInsetsCompat.CONSUMED
-    }
-  }
-
-  private inline fun ViewGroup.button(label: String, crossinline clickAction: () -> Unit) {
-    Button(context).apply {
-      text = label
-      textSize = 50f
-      setOnClickListener { clickAction.invoke() }
-    }.also { addView(it) }
+    // handleAppUpdateIntents(this, intent)
   }
 
   @SuppressLint("SetTextI18n")
@@ -157,6 +133,11 @@ class AppUpdateActivity : AppCompatActivity() {
     if (file?.exists() != true) {
       return false
     }
+
+    // DOESN't work
+    // installApkWithSession(context, file)
+    // return true
+
     Timber.d("install apk, file $file")
     val intent = Intent()
     intent.action = Intent.ACTION_VIEW

@@ -1,0 +1,33 @@
+package com.example.leonapplication.appupdatelib
+
+import android.app.Activity
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.LinearLayout
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
+
+inline fun Activity.list(content: LinearLayout.() -> Unit) {
+  LinearLayout(this).apply {
+    orientation = LinearLayout.VERTICAL
+    content()
+    fitsSystemBar()
+  }.also { setContentView(it) }
+}
+
+fun ViewGroup.fitsSystemBar() {
+  ViewCompat.setOnApplyWindowInsetsListener(this) { v, windowInsets ->
+    val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+    v.updatePadding(insets.left, insets.top, insets.right, insets.bottom)
+    WindowInsetsCompat.CONSUMED
+  }
+}
+
+inline fun ViewGroup.button(label: String, crossinline clickAction: () -> Unit) {
+  Button(context).apply {
+    text = label
+    textSize = 50f
+    setOnClickListener { clickAction.invoke() }
+  }.also { addView(it) }
+}
