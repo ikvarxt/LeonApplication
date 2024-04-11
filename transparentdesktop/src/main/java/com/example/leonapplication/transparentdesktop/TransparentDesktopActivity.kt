@@ -11,6 +11,8 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.example.leonapplication.extension.button
+import com.example.leonapplication.extension.list
 
 private var PERMISSIONS_REQUIRED = arrayOf(Manifest.permission.CAMERA)
 

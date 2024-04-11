@@ -1,4 +1,4 @@
-package com.example.leonapplication.nativedemo
+package com.example.leonapplication.extension
 
 import android.app.Activity
 import android.view.ViewGroup

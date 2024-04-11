@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-  namespace = "com.example.leonapplication.appupdatelib"
+  namespace = "com.example.leonapplication.extension"
   compileSdk = libs.versions.targetSdk.get().toInt()
 
   defaultConfig {
@@ -30,17 +30,9 @@ android {
 }
 
 dependencies {
-  implementation(project(":extension"))
-
   implementation(libs.androidx.core.ktx)
-  implementation(libs.androidx.appcompat)
-  implementation(libs.google.material)
-  implementation(platform(libs.okhttp.bom))
-  implementation(libs.okhttp)
-  implementation(libs.timber)
-  implementation(libs.gson)
-  testImplementation(libs.junit)
-  testImplementation(libs.kotest.assertions)
-  androidTestImplementation(libs.androidx.test.ext.junit)
-  androidTestImplementation(libs.androidx.espresso.core)
+  implementation(libs.androidx.activity)
+  // testImplementation(libs.junit)
+  // androidTestImplementation(libs.androidx.test.ext.junit)
+  // androidTestImplementation(libs.androidx.espresso.core)
 }

@@ -1,5 +1,11 @@
 @file:Suppress("UnstableApiUsage")
 
+include(":extension")
+
+
+include(":viewextension")
+
+
 pluginManagement {
   repositories {
     google()
@@ -20,12 +26,12 @@ rootProject.name = "LeonApplicationPublic"
 include(":app")
 //include(":asmdemo")
 //includeBuild("asmdemo-build-logic")
-//include(":floatwindowdemo")
-//include(":j2v8demo")
-//include(":webviewdemo")
-//include(":tdddemo")
-//include(":jsonlib")
-//include(":nativedemo")
-//include(":appupdatelib")
-//include(":downloadlib")
+include(":floatwindowdemo")
+include(":j2v8demo")
+include(":webviewdemo")
+include(":tdddemo")
+include(":jsonlib")
+include(":nativedemo")
+include(":appupdatelib")
+include(":downloadlib")
 include(":transparentdesktop")

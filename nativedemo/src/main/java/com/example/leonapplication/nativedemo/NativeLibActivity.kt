@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.example.leonapplication.extension.button
+import com.example.leonapplication.extension.list
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
