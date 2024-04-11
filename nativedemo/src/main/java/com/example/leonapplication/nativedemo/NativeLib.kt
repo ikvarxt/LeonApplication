@@ -8,6 +8,8 @@ class NativeLib {
    */
   external fun stringFromJNI(): String
 
+  external fun allocMemory(size: Long)
+
   companion object {
     // Used to load the 'nativedemo' library on application startup.
     init {
