@@ -1,11 +1,5 @@
 @file:Suppress("UnstableApiUsage")
 
-include(":extension")
-
-
-include(":viewextension")
-
-
 pluginManagement {
   repositories {
     google()
@@ -35,3 +29,6 @@ include(":nativedemo")
 include(":appupdatelib")
 include(":downloadlib")
 include(":transparentdesktop")
+
+// ext
+include(":extension")
