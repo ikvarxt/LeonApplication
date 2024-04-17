@@ -5,12 +5,15 @@ import android.app.Application
 import android.content.Context
 import android.content.pm.PackageManager
 import android.content.pm.PackageManager.NameNotFoundException
+import com.example.leonapplication.extension.globalApp
 import timber.log.Timber
 
 class App : Application() {
 
   override fun onCreate() {
     super.onCreate()
+
+    globalApp = this
 
     Timber.plant(Timber.DebugTree())
   }

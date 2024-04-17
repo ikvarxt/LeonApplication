@@ -48,6 +48,7 @@ dependencies {
   implementation(libs.google.material)
   implementation(libs.constraintlayout)
   implementation(libs.timber)
+  implementation(project(":extension"))
   testImplementation(libs.junit)
   androidTestImplementation(libs.androidx.test.ext.junit)
   androidTestImplementation(libs.androidx.espresso.core)

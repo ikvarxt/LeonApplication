@@ -6,6 +6,7 @@ import android.widget.Button
 import android.widget.LinearLayout
 import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
+import androidx.core.util.TypedValueCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
@@ -34,3 +35,5 @@ inline fun ViewGroup.button(label: String, crossinline clickAction: () -> Unit) 
     setOnClickListener { clickAction.invoke() }
   }.also { addView(it) }
 }
+
+val Int.dip get() = TypedValueCompat.dpToPx(this.toFloat(), globalApp.resources.displayMetrics)

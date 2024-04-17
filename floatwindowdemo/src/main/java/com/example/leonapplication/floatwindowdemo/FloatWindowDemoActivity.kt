@@ -3,7 +3,6 @@ package com.example.leonapplication.floatwindowdemo
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.content.res.Resources
 import android.graphics.PixelFormat
 import android.net.Uri
 import android.os.Bundle
@@ -19,6 +18,7 @@ import android.widget.LinearLayout
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.setMargins
+import com.example.leonapplication.extension.dip
 
 class FloatWindowDemoActivity : AppCompatActivity() {
 
@@ -86,7 +86,7 @@ class FloatWindowDemoActivity : AppCompatActivity() {
     // don't know why have to set gravity to top | start to this view to make x and y correct
     gravity = Gravity.TOP or Gravity.START
     x = 0
-    y = 28.dp
+    y = 28.dip.toInt()
   }
 
   private fun createView(): View {
@@ -165,6 +165,3 @@ class FloatWindowDemoActivity : AppCompatActivity() {
       )
   }
 }
-
-val Int.dp
-  get() = (this * Resources.getSystem().displayMetrics.density).toInt()

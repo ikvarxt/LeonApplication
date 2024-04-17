@@ -74,6 +74,7 @@ dependencies {
     kover(it.value)
     println("### app module apply ${it.value}")
   }
+  implementation(project(":extension"))
 
   implementation(libs.timber)
 }
