@@ -10,6 +10,10 @@ class NativeLib {
 
   external fun allocMemory(size: Long)
 
+  fun stringFromJvm(): String {
+    return " & JVM!"
+  }
+
   companion object {
     // Used to load the 'nativedemo' library on application startup.
     init {

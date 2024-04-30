@@ -4,8 +4,13 @@
 extern "C" JNIEXPORT jstring JNICALL
 Java_com_example_leonapplication_nativedemo_NativeLib_stringFromJNI(
         JNIEnv *env,
-        jobject /* this */) {
+        jobject obj) {
     std::string hello = "Hello from C++";
+    jclass cls = env->GetObjectClass(obj);
+    jmethodID jvmString = env->GetMethodID(cls, "stringFromJvm", "()Ljava/lang/String;");
+    jobject res = env->CallObjectMethod(obj, jvmString);
+    const char *resStr = env->GetStringUTFChars((jstring) res, nullptr);
+    hello.append(resStr);
     return env->NewStringUTF(hello.c_str());
 }
 
