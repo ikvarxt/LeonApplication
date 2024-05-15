@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.example.leonapplication.extension
 
 import android.app.Activity
