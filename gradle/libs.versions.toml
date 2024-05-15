@@ -58,7 +58,7 @@ compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
 google-material = { module = "com.google.android.material:material", version.ref = "material" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 asm-commons = { module = "org.ow2.asm:asm-commons", version.ref = "asm-commons" }
-gradle-api = { module = "com.android.tools.build:gradle-api", version.ref = "android-plugin" }
+agp = { module = "com.android.tools.build:gradle-api", version.ref = "android-plugin" }
 moshi = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }
 moshi-kotlin = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshi" }
 navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation-fragment-ktx" }

@@ -26,7 +26,9 @@ class AsmDemoClassVisitor(api: Int, next: ClassVisitor) : ClassVisitor(api, next
     descriptor: String?,
   ) : AdviceAdapter(api, mv, access, name, descriptor) {
 
-    override fun visitCode() {
+    override fun onMethodEnter() {
+      if (name != "print") return
+
       mv.visitLdcInsn("hook hook")
       mv.visitInsn(Opcodes.ARETURN)
     }

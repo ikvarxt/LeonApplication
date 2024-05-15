@@ -1,6 +1,7 @@
 plugins {
   alias(libs.plugins.android.application)
   alias(libs.plugins.android.kotlin)
+  id("com.example.leonapplication.asmdemo.gradle-plugin")
 }
 
 android {

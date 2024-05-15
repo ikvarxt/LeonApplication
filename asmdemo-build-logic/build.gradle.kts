@@ -9,13 +9,13 @@ repositories {
 }
 
 dependencies {
-  implementation(libs.gradle.api)
+  implementation(libs.agp)
   implementation(libs.asm.commons)
 }
 
 gradlePlugin {
   plugins {
-    create("asmdemo") {
+    create("asmdemo-build-logic") {
       id = "com.example.leonapplication.asmdemo.gradle-plugin"
       implementationClass = "com.example.leonapplicaion.build_logic.AsmDemoPlugin"
     }
