@@ -4,6 +4,7 @@ plugins {
   // id("com.example.leonapplication.asmdemo.gradle-plugin")
   id("variant-aware-task")
   id("rename-apk")
+  id("add-file-to-assets")
 }
 
 android {
