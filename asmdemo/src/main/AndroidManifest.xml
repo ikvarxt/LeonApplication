@@ -4,7 +4,6 @@
   <application>
     <activity
       android:name=".AsmDemoActivity"
-      android:taskAffinity="com.example.leonapplication.asmdemo.demo"
       android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
   </application>
 </manifest>

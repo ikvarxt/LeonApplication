@@ -4,6 +4,7 @@ import android.app.Activity
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
 import androidx.core.util.TypedValueCompat
@@ -28,9 +29,17 @@ fun ViewGroup.fitsSystemBar() {
   }
 }
 
-inline fun ViewGroup.button(label: String, crossinline clickAction: () -> Unit) {
-  Button(context).apply {
+inline fun ViewGroup.button(label: String, crossinline clickAction: () -> Unit): Button {
+  return Button(context).apply {
     text = label
+    textSize = 50f
+    setOnClickListener { clickAction.invoke() }
+  }.also { addView(it) }
+}
+
+inline fun ViewGroup.text(text: String, crossinline clickAction: () -> Unit): TextView {
+  return TextView(context).apply {
+    this.text = text
     textSize = 50f
     setOnClickListener { clickAction.invoke() }
   }.also { addView(it) }

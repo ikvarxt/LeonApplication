@@ -73,7 +73,7 @@ dependencies {
     if (it.key == "app") return@forEach
     implementation(it.value)
     kover(it.value)
-    println("### app module apply ${it.value}")
+    project.logger.lifecycle("### app module apply ${it.value}")
   }
   implementation(project(":extension"))
 
