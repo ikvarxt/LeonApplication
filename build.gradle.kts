@@ -6,6 +6,7 @@ plugins {
   alias(libs.plugins.spotless) apply false
   alias(libs.plugins.kover) apply false
   alias(libs.plugins.ksp) apply false
+  alias(libs.plugins.kotlin.jvm) apply false
 }
 
 subprojects {
