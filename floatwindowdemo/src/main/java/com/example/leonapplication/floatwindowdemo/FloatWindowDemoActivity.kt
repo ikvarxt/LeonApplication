@@ -93,8 +93,8 @@ class FloatWindowDemoActivity : AppCompatActivity() {
     return ViewProvider.get(this@FloatWindowDemoActivity)
   }
 
-  override fun onDestroy() {
-    super.onDestroy()
+  override fun onStop() {
+    super.onStop()
     removeView()
   }
 
