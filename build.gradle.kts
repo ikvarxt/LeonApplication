@@ -7,6 +7,7 @@ plugins {
   alias(libs.plugins.kover) apply false
   alias(libs.plugins.ksp) apply false
   alias(libs.plugins.kotlin.jvm) apply false
+  id("dev.iurysouza.modulegraph") version "0.9.0"
 }
 
 subprojects {
@@ -71,4 +72,9 @@ subprojects {
         )
     }
   }
+}
+
+moduleGraphConfig {
+  readmePath.set("./README.md")
+  heading.set("# Module graph")
 }

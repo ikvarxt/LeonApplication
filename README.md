@@ -59,3 +59,30 @@ rootProject.childProjects.forEach {
   println("### app module apply ${it.value}")
 }
 ```
+
+# Module graph
+
+```mermaid
+%%{
+  init: {
+    'theme': 'neutral'
+  }
+}%%
+graph LR
+  :appupdatelib --> :extension
+  :transparentdesktop --> :extension
+  :asmdemo --> :extension
+  :floatwindowdemo --> :extension
+  :app --> :tdddemo
+  :app --> :downloadlib
+  :app --> :extension
+  :app --> :webviewdemo
+  :app --> :asmdemo
+  :app --> :floatwindowdemo
+  :app --> :nativedemo
+  :app --> :j2v8demo
+  :app --> :appupdatelib
+  :app --> :transparentdesktop
+  :app --> :jsonlib
+  :nativedemo --> :extension
+```
