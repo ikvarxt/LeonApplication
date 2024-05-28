@@ -2,9 +2,9 @@ plugins {
   alias(libs.plugins.android.application)
   alias(libs.plugins.kotlin.android)
   // id("com.example.leonapplication.asmdemo.gradle-plugin")
-  id("variant-aware-task")
-  id("rename-apk")
-  id("add-file-to-assets")
+  // id("variant-aware-task")
+  // id("rename-apk")
+  // id("add-file-to-assets")
 }
 
 android {
