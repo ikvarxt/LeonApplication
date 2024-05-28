@@ -1,4 +1,4 @@
-package com.example.leonapplication.j2v8demo
+package com.example.leonapplication.j2v8demo.normal
 
 interface ScriptTester : IV8MockObject {
 

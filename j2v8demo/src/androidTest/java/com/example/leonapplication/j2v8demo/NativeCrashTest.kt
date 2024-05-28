@@ -2,6 +2,9 @@ package com.example.leonapplication.j2v8demo
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.eclipsesource.v8.V8Object
+import com.example.leonapplication.j2v8demo.normal.ScriptTester
+import com.example.leonapplication.j2v8demo.normal.V8Manager
+import com.example.leonapplication.j2v8demo.normal.jsMethod
 import org.junit.Test
 import org.junit.runner.RunWith
 

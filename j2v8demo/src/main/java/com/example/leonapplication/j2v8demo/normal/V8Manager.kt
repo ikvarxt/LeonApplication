@@ -1,4 +1,4 @@
-package com.example.leonapplication.j2v8demo
+package com.example.leonapplication.j2v8demo.normal
 
 import android.util.Log
 import com.eclipsesource.v8.V8

@@ -1,6 +1,10 @@
 package com.example.leonapplication.j2v8demo
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.leonapplication.j2v8demo.normal.ClassJsonTest
+import com.example.leonapplication.j2v8demo.normal.DynamicRegisterTest
+import com.example.leonapplication.j2v8demo.normal.MapJsonTest
+import com.example.leonapplication.j2v8demo.normal.V8Manager
 import org.junit.After
 import org.junit.Before
 import org.junit.Test

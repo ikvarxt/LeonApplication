@@ -1,6 +1,6 @@
 @file:Suppress("MemberVisibilityCanBePrivate")
 
-package com.example.leonapplication.j2v8demo
+package com.example.leonapplication.j2v8demo.normal
 
 import com.eclipsesource.v8.V8Object
 import com.squareup.moshi.Moshi
