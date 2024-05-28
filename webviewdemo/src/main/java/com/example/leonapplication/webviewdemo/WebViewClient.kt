@@ -31,11 +31,11 @@ class MyWebViewClient(
     //  1. not all image loaded by Glide
     //  2. may load failed with exception
     // get image by Glide
-    getBitmapFormatFromMime(mimeType)?.let { format ->
-      Timber.d("glide load $url format ${format.name}")
-      val inputStream = view.loadBitmapFor(url).asInputSteam(format)
-      return WebResourceResponse(mimeType, coding, inputStream)
-    }
+    // getBitmapFormatFromMime(mimeType)?.let { format ->
+    //   Timber.d("glide load $url format ${format.name}")
+    //   val inputStream = view.loadBitmapFor(url).asInputSteam(format)
+    //   return WebResourceResponse(mimeType, coding, inputStream)
+    // }
 
     val response: Response
     val requestTime = measureTime {
