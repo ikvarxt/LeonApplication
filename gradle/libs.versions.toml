@@ -1,5 +1,6 @@
 [versions]
 ## build version
+javet = "3.1.2"
 minSdk = "29"
 targetSdk = "34"
 kotlinComplierExt = "1.5.10"
@@ -46,6 +47,8 @@ androidx-junit-ktx = { module = "androidx.test.ext:junit-ktx", version.ref = "an
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
 androidx-tracing = { module = "androidx.tracing:tracing-ktx", version.ref = "tracing" }
 j2v8 = { module = "com.eclipsesource.j2v8:j2v8", version.ref = "j2v8" }
+javet = { module = "com.caoccao.javet:javet", version.ref = "javet" }
+javet-android-node = { module = "com.caoccao.javet:javet-android-node", version.ref = "javet" }
 junit = { module = "junit:junit", version.ref = "junit" }
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
 compose-ui = { module = "androidx.compose.ui:ui" }
