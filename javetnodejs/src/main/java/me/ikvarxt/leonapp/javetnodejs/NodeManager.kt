@@ -39,9 +39,10 @@ class NodeManager : Closeable {
    * T can be a static class with JvmStatic annotated or a normal class
    * which need be instanced in the JavaScript side.
    */
-  inline fun <reified T> registerCallbackObject() {
-    val className = T::class.simpleName
-      ?: error("failed to get callback name ${T::class}")
+  inline fun <reified T> registerCallbackObject(name: String? = null) {
+    val className = name ?: T::class.simpleName
+    ?: error("failed to get callback name ${T::class}")
+
     node.globalObject.set(className, T::class.java)
   }
 
