@@ -49,6 +49,7 @@ androidx-tracing = { module = "androidx.tracing:tracing-ktx", version.ref = "tra
 j2v8 = { module = "com.eclipsesource.j2v8:j2v8", version.ref = "j2v8" }
 javet = { module = "com.caoccao.javet:javet", version.ref = "javet" }
 javet-android-node = { module = "com.caoccao.javet:javet-android-node", version.ref = "javet" }
+javet-android-v8 = { module = "com.caoccao.javet:javet-android-v8", version.ref = "javet" }
 junit = { module = "junit:junit", version.ref = "junit" }
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
 compose-ui = { module = "androidx.compose.ui:ui" }

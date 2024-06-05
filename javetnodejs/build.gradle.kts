@@ -40,7 +40,7 @@ dependencies {
   implementation(libs.androidx.appcompat)
   implementation(libs.google.material)
 
-  implementation(libs.javet.android.node) // Android Node (arm, arm64, x86 and x86_64)
+  api(libs.javet.android.node) // Android Node (arm, arm64, x86 and x86_64)
 
   testImplementation(libs.kotest)
   testImplementation(libs.kotest.assertions)
