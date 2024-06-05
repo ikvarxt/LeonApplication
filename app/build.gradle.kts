@@ -26,8 +26,8 @@ android {
     // first variant will be selected
     missingDimensionStrategy(
       "viewType",
-      "surfaceView",
       "normalView",
+      "surfaceView",
     )
   }
 
