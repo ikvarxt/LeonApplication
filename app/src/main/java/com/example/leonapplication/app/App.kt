@@ -3,6 +3,7 @@ package com.example.leonapplication.app
 import android.app.Activity
 import android.app.Application
 import android.content.Context
+import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.content.pm.PackageManager.NameNotFoundException
 import com.example.leonapplication.extension.globalApp
@@ -20,11 +21,18 @@ class App : Application() {
 }
 
 fun Context.getAllActivities(): List<LaunchEntryActivity>? = try {
+  fun matchPackage(list: List<String>): (ActivityInfo) -> Boolean {
+    return fun(info: ActivityInfo): Boolean {
+      return list.any { info.name.startsWith(it) } and
+        (info.name == tryGetActivityName()).not()
+    }
+  }
+
+  val packageList = listOf(packageName, "me.ikvarxt")
   packageManager.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES)
     .activities
-    .filter {
-      it.name.startsWith(packageName) and it.name.equals(tryGetActivityName()).not()
-    }.map {
+    .filter(matchPackage(packageList))
+    .map {
       LaunchEntryActivity(it.name.substringAfterLast("."), it.name)
     }
 } catch (e: NameNotFoundException) {
