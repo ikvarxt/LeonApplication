@@ -34,3 +34,4 @@ include(":javetnodejs")
 include(":extension")
 // build
 //includeBuild("build-config")
+include(":jsviewdemo")
