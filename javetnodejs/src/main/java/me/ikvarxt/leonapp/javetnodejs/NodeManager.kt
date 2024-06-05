@@ -1,14 +1,14 @@
 package me.ikvarxt.leonapp.javetnodejs
 
 import com.caoccao.javet.interception.logging.JavetStandardConsoleInterceptor
+import com.caoccao.javet.interop.NodeRuntime
 import com.caoccao.javet.interop.V8Host
-import com.caoccao.javet.interop.V8Runtime
 import com.caoccao.javet.interop.converters.JavetProxyConverter
 import java.io.Closeable
 
 class NodeManager : Closeable {
 
-  lateinit var node: V8Runtime
+  lateinit var node: NodeRuntime
 
   private lateinit var consoleInterceptor: JavetStandardConsoleInterceptor
 
