@@ -16,6 +16,24 @@ class JsViewEntryActivity : AppCompatActivity() {
 
   private lateinit var nodeManager: NodeManager
   private lateinit var editText: EditText
+  private lateinit var jsViewApi: JsViewApi
+  private lateinit var windowManager: WindowManager
+
+  private val script = """
+    function onClick(id) {
+      console.log('on click: ' + id)
+      JsViewApi.toast('click ' + id);
+    }
+    function main() {
+      let id = JsViewApi.createView("", true, 100, 100);
+      let layoutId = JsViewApi.createViewLayout(500, 300, [id]);
+      JsViewApi.setBackgroundImage(layoutId, "");
+      JsViewApi.showView(layoutId);
+      JsViewApi.move(layoutId, 200, 200);
+      
+      JsViewApi.setOnClickListener(layoutId, "onClick");
+    }
+  """.trimIndent()
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -24,13 +42,13 @@ class JsViewEntryActivity : AppCompatActivity() {
     nodeManager.init()
     setupView()
 
-    val jsViewApi = JsViewApi(this, getSystemService(Context.WINDOW_SERVICE) as WindowManager)
-    nodeManager.bindJvmClass("JsViewApi", jsViewApi)
+    windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
   }
 
   private fun execute() {
-//    nodeManager.restartWith(editText.text.toString())
-    nodeManager.loadContext(editText.text.toString())
+    nodeManager.restartWith(editText.text.toString())
+    jsViewApi = JsViewApi(this, windowManager, nodeManager.node)
+    nodeManager.bindJvmClass("JsViewApi", jsViewApi)
     nodeManager.call("main")
   }
 
@@ -38,25 +56,11 @@ class JsViewEntryActivity : AppCompatActivity() {
   private fun setupView() {
     list {
       EditText(context).apply {
-        layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0)
-          .apply {
-            weight = 1f
-          }
+        val lp = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0)
+        lp.weight = 1f
+        layoutParams = lp
         gravity = Gravity.TOP
-        setText(
-          """
-          function main() {
-            console.log(`Hello, World!`);
-            JsViewApi.createView('1', "", 300, 300);
-            
-            setTimeout(() => {
-              JsViewApi.move('1', 100, 100);
-              console.log(`move to 100, 100`);
-            }, 3000);
-            console.log('call main');
-          }
-          """.trimIndent()
-        )
+        setText(script)
       }.also { editText = it }
         .let { addView(it) }
 
