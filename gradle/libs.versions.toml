@@ -4,6 +4,7 @@ javet = "3.1.2"
 minSdk = "29"
 targetSdk = "34"
 kotlinComplierExt = "1.5.10"
+kotlinJvmToolchain = "17"
 
 ## plugins
 android-plugin = "8.2.0"
