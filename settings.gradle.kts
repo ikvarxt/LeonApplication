@@ -1,7 +1,3 @@
-@file:Suppress("UnstableApiUsage")
-
-
-
 pluginManagement {
   repositories {
     google()
@@ -23,7 +19,7 @@ include(":app")
 // demos
 //include(":asmdemo")
 //includeBuild("asmdemo-build-logic")
-include(":floatwindowdemo")
+//include(":floatwindowdemo")
 //include(":j2v8demo")
 //include(":webviewdemo")
 //include(":tdddemo")
