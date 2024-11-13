@@ -21,7 +21,7 @@ internal class AssetsImageGetter(
     return try {
       context.assets.open("$pathPrefix$source").use {
         BitmapFactory.decodeStream(it)
-      }.let { BitmapDrawable(it) }
+      }.let { BitmapDrawable(context.resources, it) }
         .also {
           val size = if (imageHeight != 0) imageHeight else it.intrinsicHeight
           it.setBounds(0, 0, size, size)

@@ -2,6 +2,8 @@
 ## build version
 javet = "3.1.2"
 minSdk = "29"
+mockitoKotlin = "5.4.0"
+robolectric = "4.13"
 targetSdk = "34"
 kotlinComplierExt = "1.5.10"
 kotlinJvmToolchain = "17"
@@ -64,10 +66,12 @@ google-material = { module = "com.google.android.material:material", version.ref
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 asm-commons = { module = "org.ow2.asm:asm-commons", version.ref = "asm-commons" }
 agp = { module = "com.android.tools.build:gradle-api", version.ref = "android-plugin" }
+mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockitoKotlin" }
 moshi = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }
 moshi-kotlin = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshi" }
 navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation-fragment-ktx" }
 navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigation-ui-ktx" }
+robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-junit" }
 okhttp-bom = { module = "com.squareup.okhttp3:okhttp-bom", version.ref = "okhttp" }

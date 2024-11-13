@@ -23,15 +23,19 @@ android {
   kotlin {
     jvmToolchain(libs.versions.kotlinJvmToolchain.get().toInt())
   }
-  kotlinOptions {
-    jvmTarget = "1.8"
+  testOptions {
+    unitTests {
+      isIncludeAndroidResources = true
+    }
   }
 }
 
 dependencies {
   implementation(libs.androidx.core.ktx)
   implementation(libs.androidx.activity)
-  // testImplementation(libs.junit)
-  // androidTestImplementation(libs.androidx.test.ext.junit)
-  // androidTestImplementation(libs.androidx.espresso.core)
+  testImplementation(libs.junit)
+  testImplementation(libs.mockito.kotlin)
+  testImplementation(libs.robolectric)
+  androidTestImplementation(libs.androidx.test.ext.junit)
+  androidTestImplementation(libs.androidx.espresso.core)
 }
