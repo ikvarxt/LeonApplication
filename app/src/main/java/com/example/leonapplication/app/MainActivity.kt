@@ -23,6 +23,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.leonapplication.app.theme.LeonApplicationTheme
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 
 class MainActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,17 +35,14 @@ class MainActivity : ComponentActivity() {
 
     setContent {
       LeonApplicationTheme {
-        Content(activities = activities)
+        Content(activities = activities.toImmutableList())
       }
     }
   }
 }
 
 @Composable
-private fun Content(
-  activities: List<LaunchEntryActivity>,
-  modifier: Modifier = Modifier,
-) {
+private fun Content(activities: ImmutableList<LaunchEntryActivity>, modifier: Modifier = Modifier) {
   Box(modifier.fillMaxSize()) {
     if (activities.isNotEmpty()) {
       LazyColumn(

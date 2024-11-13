@@ -1,6 +1,7 @@
 [versions]
 ## build version
 javet = "3.1.2"
+kotlinxCollectionsImmutable = "0.3.8"
 minSdk = "29"
 mockitoKotlin = "5.4.0"
 robolectric = "4.13"
@@ -66,6 +67,7 @@ google-material = { module = "com.google.android.material:material", version.ref
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 asm-commons = { module = "org.ow2.asm:asm-commons", version.ref = "asm-commons" }
 agp = { module = "com.android.tools.build:gradle-api", version.ref = "android-plugin" }
+kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinxCollectionsImmutable" }
 mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockitoKotlin" }
 moshi = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }
 moshi-kotlin = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshi" }

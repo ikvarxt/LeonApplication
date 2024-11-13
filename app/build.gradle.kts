@@ -67,6 +67,7 @@ dependencies {
   implementation(libs.compose.ui.graphics)
   implementation(libs.compose.ui.tooling.preview)
   implementation(libs.compose.material3)
+  implementation(libs.kotlinx.collections.immutable)
   testImplementation(libs.junit)
   androidTestImplementation(libs.androidx.junit.ktx)
   androidTestImplementation(libs.androidx.espresso.core)

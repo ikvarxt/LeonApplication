@@ -6,7 +6,6 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Looper
 import android.view.View
-import android.view.WindowInsets
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
@@ -44,7 +43,7 @@ class WebViewDemoActivity : AppCompatActivity() {
     webView.settings.javaScriptEnabled = true
     webView.webViewClient = webViewClient
     ViewCompat.setOnApplyWindowInsetsListener(webView) { v: View, i: WindowInsetsCompat ->
-      val insets = i.getInsets(WindowInsets.Type.systemBars())
+      val insets = i.getInsets(WindowInsetsCompat.Type.systemBars())
       v.setPadding(insets.left, insets.top, insets.right, insets.bottom)
       WindowInsetsCompat.CONSUMED
     }
