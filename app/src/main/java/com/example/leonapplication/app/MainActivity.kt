@@ -4,7 +4,6 @@ import android.content.ComponentName
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,7 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.example.leonapplication.app.theme.LeonApplicationTheme
+import com.example.leonapplication.extension.FlyableEmojisView
 
 class MainActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,11 +30,13 @@ class MainActivity : ComponentActivity() {
 
     val activities = getAllActivities() ?: emptyList()
 
-    setContent {
-      LeonApplicationTheme {
-        Content(activities = activities)
-      }
-    }
+//    setContent {
+//      LeonApplicationTheme {
+//        Content(activities = activities)
+//      }
+//    }
+    val view = FlyableEmojisView(this@MainActivity)
+    setContentView(view)
   }
 }
 
