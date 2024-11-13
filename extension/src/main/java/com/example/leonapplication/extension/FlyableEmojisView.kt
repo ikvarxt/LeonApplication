@@ -8,8 +8,6 @@ import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import android.os.Handler
-import android.os.Looper
 import android.util.AttributeSet
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
@@ -20,7 +18,7 @@ import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.random.Random
 
 
-class FlyableEmojisView(
+class FlyableEmojisViewLayout(
   context: Context,
   attrs: AttributeSet? = null,
   @AttrRes defStyleAttr: Int = 0,
@@ -35,17 +33,18 @@ class FlyableEmojisView(
       throw IllegalArgumentException("not found emoji drawable from assets")
     }
 
-    fun HeartAnimationView.pop() {
+    fun FlyableDrawableView.pop() {
+      fun Int.dp() = context.resources.displayMetrics.density * this
       burstHearts(
         drawable,
         size = (70 to 70),
         start = (width / 2f to height / 2f),
-        end = (width / 4f to height - context.resources.displayMetrics.density * 40),
-        count = 6
+        end = (width / 4f to height - 40.dp()),
+        count = 6,
       )
     }
 
-    val heartAnimationView = HeartAnimationView(context)
+    val heartAnimationView = FlyableDrawableView(context)
     addView(heartAnimationView, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
 
     setOnClickListener {
@@ -58,7 +57,7 @@ class FlyableEmojisView(
 
 }
 
-class HeartAnimationView @JvmOverloads constructor(
+class FlyableDrawableView @JvmOverloads constructor(
   context: Context,
   attrs: AttributeSet? = null,
   defStyleAttr: Int = 0,
@@ -66,7 +65,9 @@ class HeartAnimationView @JvmOverloads constructor(
 
   private val hearts = mutableListOf<Heart>()
   private val animators = CopyOnWriteArrayList<Animator>()
-  var animationDuration = 1000L
+  private var canceled = false
+
+  var duration = 1000L
 
   fun burstHearts(
     drawable: Drawable,
@@ -76,7 +77,7 @@ class HeartAnimationView @JvmOverloads constructor(
     count: Int,
     delayBetweenHearts: Long = 50L, // 心形之间的延迟时间
   ) {
-
+    canceled = false
     val addHeartsAction = Runnable {
       val (startX: Float, startY: Float) = start
       val (endX: Float, endY: Float) = end
@@ -85,22 +86,24 @@ class HeartAnimationView @JvmOverloads constructor(
       Heart(drawable, width, height, startX, startY, endX, endY).also {
         // 先绘制后添加的动画
         hearts.add(0, it)
-        startHeartAnimation(it, animationDuration)
+        startHeartAnimation(it, duration)
       }
     }
 
-    val handler = Handler(Looper.getMainLooper())
     repeat(count) { index ->
       val delayTime = index * delayBetweenHearts
-      handler.postDelayed(addHeartsAction, delayTime)
+      postDelayed(addHeartsAction, delayTime)
     }
   }
 
   fun cancel() {
+    canceled = true
     animators.forEach { it.cancel() }
   }
 
   private fun startHeartAnimation(heart: Heart, heartAnimationDuration: Long) {
+    if (canceled) return
+
     val animator = ValueAnimator.ofFloat(0f, 1f).apply {
       duration = heartAnimationDuration
       interpolator = AccelerateDecelerateInterpolator()
@@ -111,6 +114,10 @@ class HeartAnimationView @JvmOverloads constructor(
       }
 
       addListener(object : AnimatorListenerAdapter() {
+        override fun onAnimationStart(animation: Animator) {
+          if (canceled) animation.cancel()
+        }
+
         override fun onAnimationEnd(animation: Animator) {
           hearts -= heart
           animators -= animation
@@ -131,7 +138,7 @@ class HeartAnimationView @JvmOverloads constructor(
       val x = calculateBezierPoint(heart.startX, heart.controlX, heart.endX, heart.progress)
       val y = calculateBezierPoint(heart.startY, heart.controlY, heart.endY, heart.progress)
 
-      canvas.translate(x, y)
+      canvas.translate(x - heart.width / 2, y - heart.height / 2)
 
       // 缩放效果：开始时略大，然后逐渐变小
       val scale = 1.2f - 0.7f * heart.progress
@@ -152,7 +159,6 @@ class HeartAnimationView @JvmOverloads constructor(
       return (1 - t) * (1 - t) * start + 2 * (1 - t) * t * control + t * t * end
     }
   }
-
 
   class Heart(
     val drawable: Drawable,

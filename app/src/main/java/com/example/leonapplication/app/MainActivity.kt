@@ -21,7 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.example.leonapplication.extension.FlyableEmojisView
+import com.example.leonapplication.extension.FlyableEmojisViewLayout
 
 class MainActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +35,7 @@ class MainActivity : ComponentActivity() {
 //        Content(activities = activities)
 //      }
 //    }
-    val view = FlyableEmojisView(this@MainActivity)
+    val view = FlyableEmojisViewLayout(this@MainActivity)
     setContentView(view)
   }
 }
