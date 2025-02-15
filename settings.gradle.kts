@@ -1,3 +1,7 @@
+@file:Suppress("UnstableApiUsage")
+
+
+
 pluginManagement {
   repositories {
     google()
@@ -28,10 +32,11 @@ include(":floatwindowdemo")
 //include(":appupdatelib")
 //include(":downloadlib")
 //include(":transparentdesktop")
-include(":javetnodejs")
+//include(":javetnodejs")
+//include(":jsviewdemo")
+include(":recyclerviewdemo")
 
 // ext
 include(":extension")
 // build
 //includeBuild("build-config")
-include(":jsviewdemo")
