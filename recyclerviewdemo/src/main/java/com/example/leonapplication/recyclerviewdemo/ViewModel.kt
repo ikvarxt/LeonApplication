@@ -25,7 +25,7 @@ class ViewModel : ViewModel() {
       val items = getData(startIndex, size)
       startIndex += items.size
       _items.addAll(items)
-      _uiState.emit(UiState.Success(processingData(_items)))
+      _uiState.emit(UiState.Success(produceUiListItem(_items)))
     } catch (e: Exception) {
       _uiState.emit(UiState.Error(Constants.Error.LoadingFailed))
     }
@@ -39,15 +39,26 @@ class ViewModel : ViewModel() {
     request()
   }
 
-  private fun processingData(data: List<Item>): List<ListItem> = buildList {
-    add(ListItem(Constants.ViewType.Header))
+  fun loadMore() = viewModelScope.launch {
+    try {
+      val items = getData(startIndex, Constants.PAGE_SIZE)
+      startIndex += items.size
+      _items.addAll(items)
+      _uiState.emit(UiState.Success(produceUiListItem(_items)))
+    } catch (e: Exception) {
+      _uiState.emit(UiState.Error(Constants.Error.LoadingFailed))
+    }
+  }
+
+  private fun produceUiListItem(data: List<Item>): List<ListItem> = buildList {
+    add(ListItem(Constants.ViewType.Header, text = "List Header"))
     for (item in data) {
       add(ListItem(Constants.ViewType.Card, item))
     }
-    if (data.size <= Constants.FIRST_PAGE_SIZE) {
+    if (data.size <= 30) {
       add(ListItem(Constants.ViewType.LoadMore))
     } else {
-      add(ListItem(Constants.ViewType.Footer))
+      add(ListItem(Constants.ViewType.Footer, text = "Footer here"))
     }
   }
 

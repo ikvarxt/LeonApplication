@@ -1,29 +1,25 @@
 package com.example.leonapplication.recyclerviewdemo
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.leonapplication.extension.fitsSystemBar
 import kotlinx.coroutines.launch
 
-class RecyclerViewActivity : AppCompatActivity() {
+class RecyclerViewActivity : AppCompatActivity(), CardListAdapter.ItemListener {
 
   private val viewModel by viewModels<ViewModel>()
 
   private lateinit var recyclerView: RecyclerView
   private lateinit var stateView: StatefulView
-  private lateinit var listAdapter: ListAdapter
+  private lateinit var listAdapter: CardListAdapter
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -49,16 +45,12 @@ class RecyclerViewActivity : AppCompatActivity() {
   }
 
   private fun initRecycler() {
-    listAdapter = ListAdapter()
+    listAdapter = CardListAdapter(this)
     recyclerView.adapter = listAdapter
-    val layoutManager = GridLayoutManager(this, 3).apply {
-      spanSizeLookup = object : SpanSizeLookup() {
-        override fun getSpanSize(position: Int): Int {
-          val isCard = listAdapter.getItemViewType(position) == Constants.ViewType.Card.type
-          return if (isCard) 1 else 3
-        }
-      }
+    val layoutManager = CardListAdapter.layoutManager(this) { pos ->
+      listAdapter.getItemViewType(pos)
     }
+    recyclerView.addItemDecoration(GridItemDecoration(layoutManager))
     recyclerView.layoutManager = layoutManager
   }
 
@@ -78,4 +70,28 @@ class RecyclerViewActivity : AppCompatActivity() {
     }
   }
 
+  override fun onClick(item: ListItem) {
+    when (item.viewType) {
+      Constants.ViewType.Card -> toast("Card ${item.data?.id} Clicked")
+      Constants.ViewType.Header -> toast("Header Clicked")
+      Constants.ViewType.LoadMore -> viewModel.loadMore()
+      Constants.ViewType.Footer -> toast("Footer Clicked")
+    }
+  }
+
+  override fun onLongClick(item: ListItem): Boolean {
+    if (item.viewType == Constants.ViewType.Card) {
+      toast("Long click card ${item.data?.id}")
+      return true
+    } else {
+      return false
+    }
+  }
+
+  private var toast: Toast? = null
+  private fun toast(msg: String) {
+    toast?.cancel()
+    toast = Toast.makeText(this, msg, Toast.LENGTH_SHORT)
+    toast?.show()
+  }
 }
