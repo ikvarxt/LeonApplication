@@ -3,6 +3,7 @@ package com.example.leonapplication.recyclerviewdemo
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -23,6 +24,15 @@ class RecyclerViewActivity : AppCompatActivity(), CardListAdapter.ItemListener {
   private lateinit var stateView: StatefulView
   private lateinit var listAdapter: CardListAdapter
 
+  private val backPressedCallback = object : OnBackPressedCallback(false) {
+    override fun handleOnBackPressed() {
+      if (viewModel.isEditMode) {
+        viewModel.exitEditMode()
+        this.isEnabled = false
+      }
+    }
+  }
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     initViews()
@@ -36,6 +46,8 @@ class RecyclerViewActivity : AppCompatActivity(), CardListAdapter.ItemListener {
       }
     }
     viewModel.requestFirstPage()
+
+    onBackPressedDispatcher.addCallback(this, backPressedCallback)
   }
 
   private fun initViews() {
@@ -56,8 +68,8 @@ class RecyclerViewActivity : AppCompatActivity(), CardListAdapter.ItemListener {
     recyclerView.layoutManager = layoutManager
   }
 
-  private fun onUiState(uiState: UiState) {
-    if (uiState is UiState.Success) {
+  private fun onUiState(state: UiState) {
+    if (state is UiState.Success || state is UiState.Edit) {
       recyclerView.isVisible = true
       stateView.isVisible = false
     } else {
@@ -65,17 +77,20 @@ class RecyclerViewActivity : AppCompatActivity(), CardListAdapter.ItemListener {
       stateView.isVisible = true
     }
 
-    when (uiState) {
+    when (state) {
       UiState.Loading -> stateView.setLoading()
-      is UiState.Error -> stateView.setError(uiState.error)
-      is UiState.Success -> listAdapter.submitList(uiState.items)
+      is UiState.Error -> stateView.setError(state.error)
+      is UiState.Success -> listAdapter.submitList(state.items)
+      is UiState.Edit -> {
+        listAdapter.submitList(state.items)
+      }
     }
   }
 
-  override fun onClick(item: ListItem) {
-    when (item.viewType) {
+  override fun onClick(listItem: ListItem) {
+    when (listItem.viewType) {
       Constants.ViewType.Card -> {
-        val data = item.data ?: return
+        val data = listItem.data ?: return
         toast("Card ${data.id} Clicked")
         Intent(Intent.ACTION_VIEW).apply {
           setData(data.imgUrl.toUri())
@@ -87,13 +102,19 @@ class RecyclerViewActivity : AppCompatActivity(), CardListAdapter.ItemListener {
     }
   }
 
-  override fun onLongClick(item: ListItem): Boolean {
-    if (item.viewType == Constants.ViewType.Card) {
-      toast("Long click card ${item.data?.id}")
+  override fun onLongClick(listItem: ListItem): Boolean {
+    if (listItem.viewType == Constants.ViewType.Card) {
+      toast("Long click card ${listItem.data?.id}")
+      viewModel.enterEditMode()
+      backPressedCallback.isEnabled = true
       return true
     } else {
       return false
     }
+  }
+
+  override fun onChecked(listItem: ListItem, checked: Boolean) {
+    viewModel.onChecked(listItem, checked)
   }
 
   private var toast: Toast? = null

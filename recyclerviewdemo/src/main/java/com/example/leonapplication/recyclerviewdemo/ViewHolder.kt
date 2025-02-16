@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.TextView
 import androidx.annotation.LayoutRes
 import androidx.core.view.isVisible
@@ -21,8 +22,41 @@ sealed class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
   fun bind(item: ListItem) {
     if (support(item)) {
       realBind(item)
+      setEditMode(item, item.isEditMode)
     } else {
       itemView.isVisible = false
+    }
+  }
+
+  open fun setEditMode(listItem: ListItem, isEditMode: Boolean) {
+    itemView.alpha = if (isEditMode) 0.5f else 1f
+  }
+
+  open fun setChecked(isChecked: Boolean) {}
+
+  fun setListListener(listener: CardListAdapter.ItemListener?) {
+    if (listener == null) {
+      this.listener = null
+      return
+    }
+    this.listener = object : CardListAdapter.ItemListener {
+      override fun onClick(listItem: ListItem) {
+        if (listItem.isEditMode) {
+          setChecked(listItem.isChecked.not())
+        } else {
+          listener.onClick(listItem)
+        }
+      }
+
+      override fun onLongClick(listItem: ListItem): Boolean {
+        return if (listItem.isEditMode.not()) {
+          listener.onLongClick(listItem)
+        } else false
+      }
+
+      override fun onChecked(listItem: ListItem, checked: Boolean) {
+        listener.onChecked(listItem, checked)
+      }
     }
   }
 
@@ -35,7 +69,7 @@ sealed class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         Constants.ViewType.LoadMore -> LoadMoreViewHolder(parent)
         Constants.ViewType.Footer -> FooterViewHolder(parent)
       }
-      viewHolder.listener = listener
+      viewHolder.setListListener(listener)
       return viewHolder
     }
 
@@ -48,6 +82,7 @@ class CardViewHolder(parent: ViewGroup) : ViewHolder(parent.viewOf(R.layout.item
 
   private val image: ShapeableImageView = itemView.findViewById(R.id.image)
   private val name: TextView = itemView.findViewById(R.id.name)
+  private val checkbox: CheckBox = itemView.findViewById(R.id.checkbox)
 
   override fun support(item: ListItem): Boolean {
     return item.data is Item
@@ -57,18 +92,37 @@ class CardViewHolder(parent: ViewGroup) : ViewHolder(parent.viewOf(R.layout.item
     val data = listItem.data as Item
 
     name.text = data.name
-    Glide.with(image.context)
-      .asDrawable()
-      .error(R.drawable.placeholder)
-      .placeholder(R.drawable.placeholder)
-      .load(data.imgUrl)
-      .into(image)
+
+    if (image.getTag(R.id.tag_card_img_url) != data.imgUrl) {
+      image.setTag(R.id.tag_card_img_url, data.imgUrl)
+      Glide.with(image.context)
+        .asDrawable()
+        .error(R.drawable.placeholder)
+        .placeholder(R.drawable.placeholder)
+        .load(data.imgUrl)
+        .into(image)
+    }
     image.setOnClickListener {
       listener?.onClick(listItem)
     }
     image.setOnLongClickListener {
       listener?.onLongClick(listItem) ?: false
     }
+  }
+
+  override fun setEditMode(listItem: ListItem, isEditMode: Boolean) {
+    checkbox.setOnCheckedChangeListener(null)
+    checkbox.isVisible = isEditMode
+    if (isEditMode) {
+      checkbox.isChecked = listItem.isChecked
+      checkbox.setOnCheckedChangeListener { _, checked ->
+        listener?.onChecked(listItem, checked)
+      }
+    }
+  }
+
+  override fun setChecked(isChecked: Boolean) {
+    checkbox.isChecked = isChecked
   }
 
 }
@@ -86,6 +140,11 @@ class HeaderViewHolder(parent: ViewGroup) : ViewHolder(parent.viewOf(R.layout.it
     itemView.setOnClickListener {
       listener?.onClick(listItem)
     }
+  }
+
+  override fun setEditMode(listItem: ListItem, isEditMode: Boolean) {
+    super.setEditMode(listItem, isEditMode)
+    text.isEnabled = isEditMode.not()
   }
 }
 
@@ -117,5 +176,10 @@ class LoadMoreViewHolder(parent: ViewGroup) : ViewHolder(parent.viewOf(R.layout.
     button.setOnClickListener {
       listener?.onClick(listItem)
     }
+  }
+
+  override fun setEditMode(listItem: ListItem, isEditMode: Boolean) {
+    super.setEditMode(listItem, isEditMode)
+    button.isEnabled = isEditMode.not()
   }
 }

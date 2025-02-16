@@ -23,8 +23,9 @@ class CardListAdapter(
   override fun getItemViewType(position: Int) = getItem(position).viewType.type
 
   interface ItemListener {
-    fun onClick(item: ListItem)
-    fun onLongClick(item: ListItem): Boolean
+    fun onClick(listItem: ListItem)
+    fun onLongClick(listItem: ListItem): Boolean
+    fun onChecked(listItem: ListItem, checked: Boolean)
   }
 
   companion object {
@@ -47,8 +48,9 @@ data class ListItem(
   val viewType: Constants.ViewType,
   val data: Item? = null,
   val text: String? = null,
+  val isChecked: Boolean = false,
+  val isEditMode: Boolean = false,
 ) {
-  val isChecked: Boolean = false
 
   companion object : DiffUtil.ItemCallback<ListItem>() {
     override fun areItemsTheSame(oldItem: ListItem, newItem: ListItem) =
@@ -56,8 +58,9 @@ data class ListItem(
         (oldItem.text == newItem.text || oldItem.data?.id == newItem.data?.id)
 
     override fun areContentsTheSame(oldItem: ListItem, newItem: ListItem): Boolean {
-      return oldItem.isChecked == newItem.isChecked &&
-        (oldItem.text == newItem.text || oldItem.data == newItem.data)
+      return oldItem.isChecked == newItem.isChecked
+        && oldItem.isEditMode == newItem.isEditMode
+        && (oldItem.text == newItem.text || oldItem.data == newItem.data)
     }
   }
 }

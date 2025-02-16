@@ -19,6 +19,8 @@ class ViewModel : ViewModel() {
   private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
   val uiState: StateFlow<UiState> = _uiState
 
+  val isEditMode get() = _uiState.value is UiState.Edit
+
   fun request(size: Int = Constants.PAGE_SIZE) = viewModelScope.launch {
     _uiState.emit(UiState.Loading)
     try {
@@ -50,15 +52,31 @@ class ViewModel : ViewModel() {
     }
   }
 
-  private fun produceUiListItem(data: List<Item>): List<ListItem> = buildList {
-    add(ListItem(Constants.ViewType.Header, text = "List Header"))
-    for (item in data) {
-      add(ListItem(Constants.ViewType.Card, item))
+  fun enterEditMode() = viewModelScope.launch {
+    val list = produceUiListItem(items).map {
+      it.copy(isEditMode = true)
     }
-    if (data.size <= 30) {
-      add(ListItem(Constants.ViewType.LoadMore))
-    } else {
-      add(ListItem(Constants.ViewType.Footer, text = "Footer here"))
+    _uiState.emit(UiState.Edit(list))
+  }
+
+  fun exitEditMode() = viewModelScope.launch {
+    val list = produceUiListItem(items).map {
+      it.copy(isEditMode = false, isChecked = false)
+    }
+    _uiState.emit(UiState.Success(list))
+  }
+
+  private suspend fun produceUiListItem(data: List<Item>): List<ListItem> = withContext(Dispatchers.Default) {
+    return@withContext buildList {
+      add(ListItem(Constants.ViewType.Header, text = "List Header"))
+      for (item in data) {
+        add(ListItem(Constants.ViewType.Card, item))
+      }
+      if (data.size <= 30) {
+        add(ListItem(Constants.ViewType.LoadMore))
+      } else {
+        add(ListItem(Constants.ViewType.Footer, text = "Footer here"))
+      }
     }
   }
 
@@ -72,10 +90,21 @@ class ViewModel : ViewModel() {
     return@withContext items
   }
 
+  fun onChecked(listItem: ListItem, checked: Boolean) = viewModelScope.launch {
+    val list = produceUiListItem(items)
+      .map { item ->
+        if (item == listItem) {
+          item.copy(isChecked = checked, isEditMode = true)
+        } else item.copy(isEditMode = true)
+      }
+    _uiState.emit(UiState.Edit(list))
+  }
+
 }
 
 sealed class UiState {
   data object Loading : UiState()
   data class Error(val error: Constants.Error) : UiState()
   data class Success(val items: List<ListItem>) : UiState()
+  data class Edit(val items: List<ListItem>) : UiState()
 }
