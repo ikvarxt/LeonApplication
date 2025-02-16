@@ -11,10 +11,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:visibility="gone"
-    tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-    tools:spanCount="3"
     tools:itemCount="10"
+    tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
     tools:listitem="@layout/item_card"
+    tools:spanCount="3"
     tools:visibility="visible" />
 
   <include

@@ -33,17 +33,18 @@
     tools:text="Hello World" />
 
   <androidx.core.widget.ContentLoadingProgressBar
-    android:layout_width="wrap_content"
     android:id="@+id/stateLoading"
+    style="?android:attr/progressBarStyleLarge"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintBottom_toBottomOf="parent"/>
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
 
   <androidx.constraintlayout.widget.Group
-    android:layout_width="wrap_content"
     android:id="@+id/infoGroup"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     app:constraint_referenced_ids="stateImage,stateText" />
 

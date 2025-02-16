@@ -21,10 +21,14 @@ class ViewModel : ViewModel() {
 
   fun request(size: Int = Constants.PAGE_SIZE) = viewModelScope.launch {
     _uiState.emit(UiState.Loading)
-    val items = getData(startIndex, size)
-    startIndex += items.size
-    _items.addAll(items)
-    _uiState.emit(UiState.Success(processingData(_items)))
+    try {
+      val items = getData(startIndex, size)
+      startIndex += items.size
+      _items.addAll(items)
+      _uiState.emit(UiState.Success(processingData(_items)))
+    } catch (e: Exception) {
+      _uiState.emit(UiState.Error(Constants.Error.LoadingFailed))
+    }
   }
 
   fun requestFirstPage() = request(Constants.FIRST_PAGE_SIZE)
