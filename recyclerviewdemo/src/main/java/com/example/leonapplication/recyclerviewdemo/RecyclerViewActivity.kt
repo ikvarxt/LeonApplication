@@ -1,10 +1,12 @@
 package com.example.leonapplication.recyclerviewdemo
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -72,7 +74,13 @@ class RecyclerViewActivity : AppCompatActivity(), CardListAdapter.ItemListener {
 
   override fun onClick(item: ListItem) {
     when (item.viewType) {
-      Constants.ViewType.Card -> toast("Card ${item.data?.id} Clicked")
+      Constants.ViewType.Card -> {
+        val data = item.data ?: return
+        toast("Card ${data.id} Clicked")
+        Intent(Intent.ACTION_VIEW).apply {
+          setData(data.imgUrl.toUri())
+        }.also(::startActivity)
+      }
       Constants.ViewType.Header -> toast("Header Clicked")
       Constants.ViewType.LoadMore -> viewModel.loadMore()
       Constants.ViewType.Footer -> toast("Footer Clicked")
