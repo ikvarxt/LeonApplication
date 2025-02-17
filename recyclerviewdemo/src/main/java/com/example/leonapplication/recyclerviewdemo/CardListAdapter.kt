@@ -1,6 +1,7 @@
 package com.example.leonapplication.recyclerviewdemo
 
 import android.content.Context
+import android.util.Log
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
@@ -53,14 +54,30 @@ data class ListItem(
 ) {
 
   companion object : DiffUtil.ItemCallback<ListItem>() {
-    override fun areItemsTheSame(oldItem: ListItem, newItem: ListItem) =
-      oldItem.viewType == newItem.viewType &&
-        (oldItem.text == newItem.text || oldItem.data?.id == newItem.data?.id)
+
+    private const val TAG = "ListItemCallback"
+
+    override fun areItemsTheSame(oldItem: ListItem, newItem: ListItem): Boolean {
+      val isData = newItem.data != null
+      val dataEquals = oldItem.data?.id == newItem.data?.id
+      return oldItem.viewType == newItem.viewType &&
+        (if (isData) dataEquals else true)
+    }
 
     override fun areContentsTheSame(oldItem: ListItem, newItem: ListItem): Boolean {
-      return oldItem.isChecked == newItem.isChecked
+      val isData = oldItem.data != null
+      val dataEquals = oldItem.data == newItem.data
+      val textEquals = (if (newItem.text != null) oldItem.text == newItem.text else true)
+
+      val res = oldItem.isChecked == newItem.isChecked
         && oldItem.isEditMode == newItem.isEditMode
-        && (oldItem.text == newItem.text || oldItem.data == newItem.data)
+        && if (isData) dataEquals else textEquals
+      Log.d(
+        TAG, "areContentsTheSame: \n" +
+          "res=$res, isData=$isData dataEquals=$dataEquals, textEquals=$textEquals \n" +
+          "old=$oldItem, \nnew=$newItem"
+      )
+      return res
     }
   }
 }

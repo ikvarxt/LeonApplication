@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  android:orientation="vertical"
-  android:gravity="center"
-  android:foreground="?attr/selectableItemBackground"
+  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
-  android:layout_height="wrap_content">
+  android:layout_height="wrap_content"
+  android:gravity="center"
+  android:orientation="vertical">
 
-  <include layout="@layout/item_header_text" />
+  <Button
+    android:id="@+id/loadMore"
+    style="@style/Widget.AppCompat.Button.Borderless"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:clickable="false"
+    android:textAllCaps="false"
+    tools:text="Footer here" />
 
 </LinearLayout>

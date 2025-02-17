@@ -21,6 +21,8 @@ class ViewModel : ViewModel() {
 
   val isEditMode get() = _uiState.value is UiState.Edit
 
+  private val selectedItems = mutableListOf<Item>()
+
   fun request(size: Int = Constants.PAGE_SIZE) = viewModelScope.launch {
     _uiState.emit(UiState.Loading)
     try {
@@ -60,22 +62,27 @@ class ViewModel : ViewModel() {
   }
 
   fun exitEditMode() = viewModelScope.launch {
+    selectedItems.clear()
     val list = produceUiListItem(items).map {
       it.copy(isEditMode = false, isChecked = false)
     }
     _uiState.emit(UiState.Success(list))
   }
 
-  private suspend fun produceUiListItem(data: List<Item>): List<ListItem> = withContext(Dispatchers.Default) {
+  private suspend fun produceUiListItem(
+    data: List<Item>,
+    header: String? = null,
+    footer: String? = null,
+  ): List<ListItem> = withContext(Dispatchers.Default) {
     return@withContext buildList {
-      add(ListItem(Constants.ViewType.Header, text = "List Header"))
+      add(ListItem(Constants.ViewType.Header, text = header ?: "List Header"))
       for (item in data) {
         add(ListItem(Constants.ViewType.Card, item))
       }
       if (data.size <= 30) {
         add(ListItem(Constants.ViewType.LoadMore))
       } else {
-        add(ListItem(Constants.ViewType.Footer, text = "Footer here"))
+        add(ListItem(Constants.ViewType.Footer, text = footer ?: "Footer here"))
       }
     }
   }
@@ -91,7 +98,11 @@ class ViewModel : ViewModel() {
   }
 
   fun onChecked(listItem: ListItem, checked: Boolean) = viewModelScope.launch {
-    val list = produceUiListItem(items)
+    val data = listItem.data ?: return@launch
+    if (checked) selectedItems += data
+    else selectedItems -= data
+    val checkItemCount = selectedItems.size
+    val list = produceUiListItem(items, header = "Selected: $checkItemCount items")
       .map { item ->
         if (item == listItem) {
           item.copy(isChecked = checked, isEditMode = true)
