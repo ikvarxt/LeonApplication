@@ -42,6 +42,7 @@ sealed class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     this.listener = object : CardListAdapter.ItemListener {
       override fun onClick(listItem: ListItem) {
         if (listItem.isEditMode) {
+          // TODO: can't uncheck item from image click event
           setChecked(listItem.isChecked.not())
         } else {
           listener.onClick(listItem)
