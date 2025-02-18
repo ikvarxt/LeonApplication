@@ -56,7 +56,6 @@ class RecyclerViewActivity : AppCompatActivity(), CardListAdapter.ItemListener {
     setContentView(R.layout.activity_recycler_view)
     recyclerView = findViewById(R.id.recyclerView)
     recyclerView.fitsSystemBar()
-    recyclerView.itemAnimator = null
     stateView = findViewById(R.id.stateView)
   }
 
@@ -83,9 +82,7 @@ class RecyclerViewActivity : AppCompatActivity(), CardListAdapter.ItemListener {
       UiState.Loading -> stateView.setLoading()
       is UiState.Error -> stateView.setError(state.error)
       is UiState.Success -> listAdapter.submitList(state.items)
-      is UiState.Edit -> {
-        listAdapter.submitList(state.items)
-      }
+      is UiState.Edit -> listAdapter.submitList(state.items)
     }
   }
 
@@ -107,7 +104,6 @@ class RecyclerViewActivity : AppCompatActivity(), CardListAdapter.ItemListener {
 
   override fun onLongClick(listItem: ListItem): Boolean {
     if (listItem.viewType == Constants.ViewType.Card) {
-      toast("Long click card ${listItem.data?.id}")
       editMode(true)
       onChecked(listItem, true)
       backPressedCallback.isEnabled = true
