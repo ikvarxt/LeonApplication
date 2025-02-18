@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.ListAdapter
 
 class CardListAdapter(
   private val listener: ItemListener? = null,
-) : ListAdapter<ListItem, ViewHolder>(ListItem) {
+) : ListAdapter<ListItem, ViewHolder>(ListItem.ItemCallback()) {
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
     val type = Constants.ViewType.entries.first { it.type == viewType }
@@ -18,7 +18,9 @@ class CardListAdapter(
   }
 
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-    holder.bind(getItem(position))
+    val item = getItem(position)
+    Log.d(TAG, "onBindViewHolder: item=$item")
+    holder.bind(item)
   }
 
   override fun getItemViewType(position: Int) = getItem(position).viewType.type
@@ -30,6 +32,8 @@ class CardListAdapter(
   }
 
   companion object {
+    private const val TAG = "CardListAdapter"
+
     const val SPAN_COUNT = 3
     const val CARD_SPAN_SIZE = 1
 
@@ -43,6 +47,7 @@ class CardListAdapter(
         }
       }
   }
+
 }
 
 data class ListItem(
@@ -53,9 +58,7 @@ data class ListItem(
   val isEditMode: Boolean = false,
 ) {
 
-  companion object : DiffUtil.ItemCallback<ListItem>() {
-
-    private const val TAG = "ListItemCallback"
+  class ItemCallback : DiffUtil.ItemCallback<ListItem>() {
 
     override fun areItemsTheSame(oldItem: ListItem, newItem: ListItem): Boolean {
       val isData = newItem.data != null
@@ -79,5 +82,9 @@ data class ListItem(
       )
       return res
     }
+  }
+
+  companion object {
+    private const val TAG = "ListItemCallback"
   }
 }

@@ -21,7 +21,8 @@ class ViewModel : ViewModel() {
 
   val isEditMode get() = _uiState.value is UiState.Edit
 
-  private val selectedItems = mutableListOf<Item>()
+  private val _selectedItems = mutableSetOf<Item>()
+  val selectedItems: Set<Item> = _selectedItems
 
   fun request(size: Int = Constants.PAGE_SIZE) = viewModelScope.launch {
     _uiState.emit(UiState.Loading)
@@ -55,17 +56,13 @@ class ViewModel : ViewModel() {
   }
 
   fun enterEditMode() = viewModelScope.launch {
-    val list = produceUiListItem(items).map {
-      it.copy(isEditMode = true)
-    }
+    val list = produceUiListItem(items, edit = true)
     _uiState.emit(UiState.Edit(list))
   }
 
   fun exitEditMode() = viewModelScope.launch {
-    selectedItems.clear()
-    val list = produceUiListItem(items).map {
-      it.copy(isEditMode = false, isChecked = false)
-    }
+    _selectedItems.clear()
+    val list = produceUiListItem(items)
     _uiState.emit(UiState.Success(list))
   }
 
@@ -73,16 +70,17 @@ class ViewModel : ViewModel() {
     data: List<Item>,
     header: String? = null,
     footer: String? = null,
+    edit: Boolean = false,
   ): List<ListItem> = withContext(Dispatchers.Default) {
     return@withContext buildList {
-      add(ListItem(Constants.ViewType.Header, text = header ?: "List Header"))
+      add(ListItem(Constants.ViewType.Header, text = header ?: "List Header", isEditMode = edit))
       for (item in data) {
-        add(ListItem(Constants.ViewType.Card, item))
+        add(ListItem(Constants.ViewType.Card, item, isEditMode = edit))
       }
       if (data.size <= 30) {
-        add(ListItem(Constants.ViewType.LoadMore))
+        add(ListItem(Constants.ViewType.LoadMore, isEditMode = edit))
       } else {
-        add(ListItem(Constants.ViewType.Footer, text = footer ?: "Footer here"))
+        add(ListItem(Constants.ViewType.Footer, text = footer ?: "Footer here", isEditMode = edit))
       }
     }
   }
@@ -99,14 +97,15 @@ class ViewModel : ViewModel() {
 
   fun onChecked(listItem: ListItem, checked: Boolean) = viewModelScope.launch {
     val data = listItem.data ?: return@launch
-    if (checked) selectedItems += data
-    else selectedItems -= data
-    val checkItemCount = selectedItems.size
-    val list = produceUiListItem(items, header = "Selected: $checkItemCount items")
+
+    if (checked) _selectedItems += data
+    else _selectedItems -= data
+
+    val header = "Selected: ${selectedItems.size} items"
+    val list = produceUiListItem(items, header, edit = true)
       .map { item ->
-        if (item == listItem) {
-          item.copy(isChecked = checked, isEditMode = true)
-        } else item.copy(isEditMode = true)
+        val isChecked = selectedItems.contains(item.data)
+        item.copy(isChecked = isChecked)
       }
     _uiState.emit(UiState.Edit(list))
   }

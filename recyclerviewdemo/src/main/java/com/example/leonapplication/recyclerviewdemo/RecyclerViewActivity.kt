@@ -12,6 +12,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.RecyclerView
 import com.example.leonapplication.extension.fitsSystemBar
 import kotlinx.coroutines.launch
@@ -27,7 +28,7 @@ class RecyclerViewActivity : AppCompatActivity(), CardListAdapter.ItemListener {
   private val backPressedCallback = object : OnBackPressedCallback(false) {
     override fun handleOnBackPressed() {
       if (viewModel.isEditMode) {
-        viewModel.exitEditMode()
+        editMode(false)
         this.isEnabled = false
       }
     }
@@ -55,6 +56,7 @@ class RecyclerViewActivity : AppCompatActivity(), CardListAdapter.ItemListener {
     setContentView(R.layout.activity_recycler_view)
     recyclerView = findViewById(R.id.recyclerView)
     recyclerView.fitsSystemBar()
+    recyclerView.itemAnimator = null
     stateView = findViewById(R.id.stateView)
   }
 
@@ -96,6 +98,7 @@ class RecyclerViewActivity : AppCompatActivity(), CardListAdapter.ItemListener {
           setData(data.imgUrl.toUri())
         }.also(::startActivity)
       }
+
       Constants.ViewType.Header -> toast("Header Clicked")
       Constants.ViewType.LoadMore -> viewModel.loadMore()
       Constants.ViewType.Footer -> toast("Footer Clicked")
@@ -105,7 +108,8 @@ class RecyclerViewActivity : AppCompatActivity(), CardListAdapter.ItemListener {
   override fun onLongClick(listItem: ListItem): Boolean {
     if (listItem.viewType == Constants.ViewType.Card) {
       toast("Long click card ${listItem.data?.id}")
-      viewModel.enterEditMode()
+      editMode(true)
+      onChecked(listItem, true)
       backPressedCallback.isEnabled = true
       return true
     } else {
@@ -115,6 +119,16 @@ class RecyclerViewActivity : AppCompatActivity(), CardListAdapter.ItemListener {
 
   override fun onChecked(listItem: ListItem, checked: Boolean) {
     viewModel.onChecked(listItem, checked)
+  }
+
+  private fun editMode(isEdit: Boolean) {
+    if (isEdit) {
+      viewModel.enterEditMode()
+      recyclerView.itemAnimator = null
+    } else {
+      viewModel.exitEditMode()
+      recyclerView.itemAnimator = DefaultItemAnimator()
+    }
   }
 
   private var toast: Toast? = null

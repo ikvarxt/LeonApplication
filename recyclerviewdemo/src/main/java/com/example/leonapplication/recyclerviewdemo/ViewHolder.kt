@@ -29,7 +29,7 @@ sealed class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
   }
 
   open fun setEditMode(listItem: ListItem, isEditMode: Boolean) {
-    itemView.alpha = if (isEditMode) 0.5f else 1f
+    itemView.alpha = if (isEditMode) 0.3f else 1f
   }
 
   open fun setChecked(isChecked: Boolean) {}
@@ -39,11 +39,10 @@ sealed class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
       this.listener = null
       return
     }
-    this.listener = object : CardListAdapter.ItemListener {
+    this.listener = object : CardListAdapter.ItemListener by listener {
       override fun onClick(listItem: ListItem) {
         if (listItem.isEditMode) {
-          // TODO: can't uncheck item from image click event
-          setChecked(listItem.isChecked.not())
+          onChecked(listItem, listItem.isChecked.not())
         } else {
           listener.onClick(listItem)
         }
@@ -53,10 +52,6 @@ sealed class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         return if (listItem.isEditMode.not()) {
           listener.onLongClick(listItem)
         } else false
-      }
-
-      override fun onChecked(listItem: ListItem, checked: Boolean) {
-        listener.onChecked(listItem, checked)
       }
     }
   }
@@ -115,7 +110,10 @@ class CardViewHolder(parent: ViewGroup) : ViewHolder(parent.viewOf(R.layout.item
     checkbox.setOnCheckedChangeListener(null)
     checkbox.isVisible = isEditMode
     if (isEditMode) {
-      checkbox.isChecked = listItem.isChecked
+      if (checkbox.isChecked != listItem.isChecked) {
+        checkbox.toggle()
+      }
+//      checkbox.isChecked = listItem.isChecked
       checkbox.setOnCheckedChangeListener { _, checked ->
         listener?.onChecked(listItem, checked)
       }
@@ -180,7 +178,6 @@ class LoadMoreViewHolder(parent: ViewGroup) : ViewHolder(parent.viewOf(R.layout.
   }
 
   override fun setEditMode(listItem: ListItem, isEditMode: Boolean) {
-    super.setEditMode(listItem, isEditMode)
     button.isEnabled = isEditMode.not()
   }
 }
