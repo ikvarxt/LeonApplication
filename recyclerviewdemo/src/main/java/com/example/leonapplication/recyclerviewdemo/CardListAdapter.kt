@@ -18,9 +18,7 @@ class CardListAdapter(
   }
 
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-    val item = getItem(position)
-    Log.d(TAG, "onBindViewHolder: item=$item")
-    holder.bind(item)
+    holder.bind(getItem(position))
   }
 
   override fun getItemViewType(position: Int) = getItem(position).viewType.type
