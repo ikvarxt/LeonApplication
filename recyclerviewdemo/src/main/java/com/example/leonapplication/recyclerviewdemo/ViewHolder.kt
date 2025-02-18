@@ -146,15 +146,15 @@ class HeaderViewHolder(parent: ViewGroup) : ViewHolder(parent.viewOf(R.layout.it
 
 class FooterViewHolder(parent: ViewGroup) : ViewHolder(parent.viewOf(R.layout.item_footer)) {
 
-  private val text: TextView = itemView.findViewById(R.id.text)
+  private val button: Button = itemView.findViewById(R.id.button)
 
   override fun support(item: ListItem): Boolean {
     return item.viewType == Constants.ViewType.Footer
   }
 
   override fun realBind(listItem: ListItem) {
-    text.text = listItem.text.toString()
-    itemView.setOnClickListener {
+    button.text = listItem.text.toString()
+    button.setOnClickListener {
       listener?.onClick(listItem)
     }
   }
