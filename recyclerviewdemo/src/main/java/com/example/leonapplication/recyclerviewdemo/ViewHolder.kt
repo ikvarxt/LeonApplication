@@ -110,10 +110,7 @@ class CardViewHolder(parent: ViewGroup) : ViewHolder(parent.viewOf(R.layout.item
     checkbox.setOnCheckedChangeListener(null)
     checkbox.isVisible = isEditMode
     if (isEditMode) {
-      if (checkbox.isChecked != listItem.isChecked) {
-        checkbox.toggle()
-      }
-//      checkbox.isChecked = listItem.isChecked
+      checkbox.isChecked = listItem.isChecked
       checkbox.setOnCheckedChangeListener { _, checked ->
         listener?.onChecked(listItem, checked)
       }
