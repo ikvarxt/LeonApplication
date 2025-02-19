@@ -31,7 +31,6 @@ class RecyclerViewActivity : AppCompatActivity(), CardListAdapter.ItemListener {
     override fun handleOnBackPressed() {
       if (viewModel.isEditMode) {
         editMode(false)
-        this.isEnabled = false
       }
     }
   }
@@ -109,7 +108,6 @@ class RecyclerViewActivity : AppCompatActivity(), CardListAdapter.ItemListener {
     if (listItem.viewType == Constants.ViewType.Card) {
       editMode(true)
       onChecked(listItem, true)
-      backPressedCallback.isEnabled = true
       return true
     } else {
       return false
@@ -130,6 +128,7 @@ class RecyclerViewActivity : AppCompatActivity(), CardListAdapter.ItemListener {
       viewModel.exitEditMode()
       recyclerView.itemAnimator = DefaultItemAnimator()
     }
+    backPressedCallback.isEnabled = isEdit
   }
 
   private var toast: Toast? = null
