@@ -2,6 +2,7 @@ package com.example.leonapplication.recyclerviewdemo
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
@@ -24,6 +25,7 @@ class RecyclerViewActivity : AppCompatActivity(), CardListAdapter.ItemListener {
   private lateinit var recyclerView: RecyclerView
   private lateinit var stateView: StatefulView
   private lateinit var listAdapter: CardListAdapter
+  private lateinit var statusBarGradient: View
 
   private val backPressedCallback = object : OnBackPressedCallback(false) {
     override fun handleOnBackPressed() {
@@ -54,9 +56,12 @@ class RecyclerViewActivity : AppCompatActivity(), CardListAdapter.ItemListener {
   private fun initViews() {
     enableEdgeToEdge()
     setContentView(R.layout.activity_recycler_view)
+    statusBarGradient = findViewById(R.id.status_bar_gradient)
     recyclerView = findViewById(R.id.recyclerView)
     recyclerView.fitsSystemBar()
     stateView = findViewById(R.id.stateView)
+    FadeViewScrollHelper.initialHeight(statusBarGradient)
+    recyclerView.addOnScrollListener(FadeViewScrollHelper(statusBarGradient, 300))
   }
 
   private fun initRecycler() {

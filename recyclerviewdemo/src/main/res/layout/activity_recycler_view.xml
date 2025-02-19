@@ -31,4 +31,10 @@
     app:layout_constraintTop_toTopOf="parent"
     tools:visibility="visible" />
 
+  <include
+    layout="@layout/layout_status_bar_gradient"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
