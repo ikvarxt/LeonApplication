@@ -36,7 +36,10 @@ class ViewModel : ViewModel() {
     }
   }
 
-  fun requestFirstPage() = request(Constants.FIRST_PAGE_SIZE)
+  fun requestFirstPage() {
+    if (startIndex != 0) return
+    request(Constants.FIRST_PAGE_SIZE)
+  }
 
   fun refresh() {
     startIndex = 0

@@ -32,8 +32,6 @@ sealed class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     itemView.alpha = if (isEditMode) 0.3f else 1f
   }
 
-  open fun setChecked(isChecked: Boolean) {}
-
   fun setListListener(listener: CardListAdapter.ItemListener?) {
     if (listener == null) {
       this.listener = null
@@ -114,11 +112,12 @@ class CardViewHolder(parent: ViewGroup) : ViewHolder(parent.viewOf(R.layout.item
       checkbox.setOnCheckedChangeListener { _, checked ->
         listener?.onChecked(listItem, checked)
       }
+    } else {
+      if (checkbox.isChecked) {
+        checkbox.isChecked = false
+        checkbox.jumpDrawablesToCurrentState()
+      }
     }
-  }
-
-  override fun setChecked(isChecked: Boolean) {
-    checkbox.isChecked = isChecked
   }
 
 }
@@ -157,6 +156,11 @@ class FooterViewHolder(parent: ViewGroup) : ViewHolder(parent.viewOf(R.layout.it
     button.setOnClickListener {
       listener?.onClick(listItem)
     }
+  }
+
+  override fun setEditMode(listItem: ListItem, isEditMode: Boolean) {
+    super.setEditMode(listItem, isEditMode)
+    button.isEnabled = isEditMode.not()
   }
 }
 

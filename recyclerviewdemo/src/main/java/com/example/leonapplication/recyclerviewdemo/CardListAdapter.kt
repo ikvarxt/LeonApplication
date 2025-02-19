@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
 import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 
 class CardListAdapter(
   private val listener: ItemListener? = null,
@@ -32,18 +33,27 @@ class CardListAdapter(
   companion object {
     private const val TAG = "CardListAdapter"
 
-    const val SPAN_COUNT = 3
+    private const val SPAN_COUNT = 3
+    private const val SPAN_COUNT_HORIZONTAL = 6
     const val CARD_SPAN_SIZE = 1
 
-    fun layoutManager(context: Context, viewType: (position: Int) -> Int) =
-      GridLayoutManager(context, SPAN_COUNT).apply {
+    fun layoutManager(
+      context: Context,
+      viewType: (position: Int) -> Int,
+      orientation: Int = RecyclerView.VERTICAL,
+    ): GridLayoutManager {
+      val spanCount =
+        if (orientation == RecyclerView.HORIZONTAL) SPAN_COUNT_HORIZONTAL else SPAN_COUNT
+
+      return GridLayoutManager(context, spanCount).apply {
         spanSizeLookup = object : SpanSizeLookup() {
           override fun getSpanSize(position: Int): Int {
             val isCard = viewType(position) == Constants.ViewType.Card.type
-            return if (isCard) CARD_SPAN_SIZE else SPAN_COUNT
+            return if (isCard) CARD_SPAN_SIZE else spanCount
           }
         }
       }
+    }
   }
 
 }

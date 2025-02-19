@@ -62,10 +62,8 @@ class RecyclerViewActivity : AppCompatActivity(), CardListAdapter.ItemListener {
   private fun initRecycler() {
     listAdapter = CardListAdapter(this)
     recyclerView.adapter = listAdapter
-    val layoutManager = CardListAdapter.layoutManager(this) { pos ->
-      listAdapter.getItemViewType(pos)
-    }
-    recyclerView.addItemDecoration(GridItemDecoration(layoutManager))
+    recyclerView.addItemDecoration(GridItemDecoration(this))
+    val layoutManager = CardListAdapter.layoutManager(this, ::viewTypeGetter)
     recyclerView.layoutManager = layoutManager
   }
 
@@ -117,10 +115,12 @@ class RecyclerViewActivity : AppCompatActivity(), CardListAdapter.ItemListener {
     viewModel.onChecked(listItem, checked)
   }
 
+  private fun viewTypeGetter(pos: Int) = listAdapter.getItemViewType(pos)
+
   private fun editMode(isEdit: Boolean) {
     if (isEdit) {
-      viewModel.enterEditMode()
       recyclerView.itemAnimator = null
+      viewModel.enterEditMode()
     } else {
       viewModel.exitEditMode()
       recyclerView.itemAnimator = DefaultItemAnimator()

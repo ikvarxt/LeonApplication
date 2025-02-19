@@ -1,21 +1,26 @@
 package com.example.leonapplication.recyclerviewdemo
 
+import android.content.Context
 import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-class GridItemDecoration(private val layoutManager: GridLayoutManager) : RecyclerView.ItemDecoration() {
+class GridItemDecoration(
+  context: Context,
+) : RecyclerView.ItemDecoration() {
+
+  private val resources = context.resources
+  private val margin = resources.getDimensionPixelSize(R.dimen.list_margin)
+  private val verticalGap = resources.getDimensionPixelSize(R.dimen.list_vertical_gap)
 
   override fun getItemOffsets(
     outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State,
   ) {
-    val resources = view.resources
     val position = parent.getChildAdapterPosition(view)
     if (position == RecyclerView.NO_POSITION) return
 
-    val margin = resources.getDimensionPixelSize(R.dimen.list_margin)
-    val verticalGap = resources.getDimensionPixelSize(R.dimen.list_vertical_gap)
+    val layoutManager = parent.layoutManager as? GridLayoutManager ?: return
 
     val spanCount = layoutManager.spanCount
     val spanSize = layoutManager.spanSizeLookup.getSpanSize(position)
@@ -28,9 +33,8 @@ class GridItemDecoration(private val layoutManager: GridLayoutManager) : Recycle
       left = margin
       right = margin
     } else {
-      val itemSpacing = margin * (spanCount - 1) / spanCount
-      left = margin - spanIndex * itemSpacing / spanCount
-      right = (spanIndex + spanSize) * itemSpacing / spanCount
+      left = margin - spanIndex * margin / spanCount
+      right = (spanIndex + 1) * margin / spanCount
     }
 
     outRect.left = left
