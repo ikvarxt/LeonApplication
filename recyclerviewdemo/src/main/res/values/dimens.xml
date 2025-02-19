@@ -3,4 +3,5 @@
   <dimen name="card_radius">12dp</dimen>
   <dimen name="list_margin">12dp</dimen>
   <dimen name="list_vertical_gap">12dp</dimen>
+  <dimen name="standard_scroll_height">100dp</dimen>
 </resources>
