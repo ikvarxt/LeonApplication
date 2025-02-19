@@ -10,12 +10,18 @@ import androidx.recyclerview.widget.RecyclerView
 class FadeViewScrollHelper(
   private val view: View,
   private val scrollHeight: Int,
+  var isEnabled: Boolean = false,
 ) : RecyclerView.OnScrollListener() {
 
   private var offset = 0
 
   override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
     offset += dy
+
+    if (isEnabled.not()) {
+      view.alpha = 0f
+      return
+    }
 
     view.alpha =
       if (offset > scrollHeight) 1f
