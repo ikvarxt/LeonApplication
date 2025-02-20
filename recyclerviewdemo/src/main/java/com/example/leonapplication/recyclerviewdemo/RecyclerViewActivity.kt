@@ -60,8 +60,6 @@ class RecyclerViewActivity : AppCompatActivity(), CardListAdapter.ItemListener {
     recyclerView.fitsSystemBar()
     stateView = findViewById(R.id.stateView)
     FadeViewScrollHelper.initialHeight(statusBarGradient)
-    val scrollHeight = resources.getDimensionPixelSize(R.dimen.standard_scroll_height)
-    recyclerView.addOnScrollListener(FadeViewScrollHelper(statusBarGradient, scrollHeight))
   }
 
   private fun initRecycler() {
@@ -70,6 +68,11 @@ class RecyclerViewActivity : AppCompatActivity(), CardListAdapter.ItemListener {
     recyclerView.addItemDecoration(GridItemDecoration(this))
     val layoutManager = CardListAdapter.layoutManager(this, ::viewTypeGetter)
     recyclerView.layoutManager = layoutManager
+    val scrollHeight = resources.getDimensionPixelSize(R.dimen.standard_scroll_height)
+    recyclerView.addOnScrollListener(FadeViewScrollHelper(statusBarGradient, scrollHeight))
+    recyclerView.addOnScrollListener(ScrollerAnimationHelper(ViewHolder::class) { state ->
+      setAnimationState(state)
+    })
   }
 
   private fun onUiState(state: UiState) {

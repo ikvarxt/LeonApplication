@@ -1,5 +1,6 @@
 package com.example.leonapplication.recyclerviewdemo
 
+import android.graphics.drawable.Animatable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,6 +32,8 @@ sealed class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
   open fun setEditMode(listItem: ListItem, isEditMode: Boolean) {
     itemView.alpha = if (isEditMode) 0.3f else 1f
   }
+
+  open fun setAnimationState(isAnimated: Boolean) {}
 
   fun setListListener(listener: CardListAdapter.ItemListener?) {
     if (listener == null) {
@@ -117,6 +120,15 @@ class CardViewHolder(parent: ViewGroup) : ViewHolder(parent.viewOf(R.layout.item
         checkbox.isChecked = false
         checkbox.jumpDrawablesToCurrentState()
       }
+    }
+  }
+
+  override fun setAnimationState(isAnimated: Boolean) {
+    val drawable = image.drawable as? Animatable ?: return
+    if (isAnimated) {
+      if (drawable.isRunning.not()) drawable.start()
+    } else {
+      if (drawable.isRunning) drawable.stop()
     }
   }
 
