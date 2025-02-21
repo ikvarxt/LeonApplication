@@ -34,6 +34,7 @@ sealed class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
   }
 
   open fun setAnimationState(isAnimated: Boolean) {}
+  open fun onViewRecycled() {}
 
   fun setListListener(listener: CardListAdapter.ItemListener?) {
     if (listener == null) {
@@ -130,6 +131,11 @@ class CardViewHolder(parent: ViewGroup) : ViewHolder(parent.viewOf(R.layout.item
     } else {
       if (drawable.isRunning) drawable.stop()
     }
+  }
+
+  override fun onViewRecycled() {
+    image.setTag(R.id.tag_card_img_url, null)
+    Glide.with(image).clear(image)
   }
 
 }

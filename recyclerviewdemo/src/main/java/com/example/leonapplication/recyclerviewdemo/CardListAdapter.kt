@@ -24,6 +24,8 @@ class CardListAdapter(
 
   override fun getItemViewType(position: Int) = getItem(position).viewType.type
 
+  override fun onViewRecycled(holder: ViewHolder) = holder.onViewRecycled()
+
   interface ItemListener {
     fun onClick(listItem: ListItem)
     fun onLongClick(listItem: ListItem): Boolean
