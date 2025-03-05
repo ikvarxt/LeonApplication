@@ -149,7 +149,7 @@ val printPom by tasks.registering {
   }
 }
 
-tasks.withType<PublishToMavenRepository> {
+tasks.withType<AbstractPublishToMaven> {
   dependsOn(collectDependencies)
   finalizedBy(printPom)
 }
