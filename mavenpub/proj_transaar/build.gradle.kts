@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-  namespace = "com.leon.app.proj_deps"
+  namespace = "com.leon.app.mavenpub.proj_transaar"
   compileSdk = 34
 
   defaultConfig {
@@ -26,9 +26,6 @@ android {
 }
 
 dependencies {
-  implementation(libs.androidx.core.ktx)
-  implementation(libs.google.material)
-  testImplementation(libs.junit)
-  androidTestImplementation(libs.androidx.test.ext.junit)
-  androidTestImplementation(libs.androidx.espresso.core)
+  // we should add the appcompat transitive dependency to mavenpub artifact's pom
+  implementation(libs.androidx.appcompat)
 }

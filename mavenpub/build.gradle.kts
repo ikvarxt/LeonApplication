@@ -1,4 +1,7 @@
+import Build_gradle.Dep
 import groovy.util.Node
+import groovy.util.NodeList
+import groovy.xml.XmlParser
 
 plugins {
   alias(libs.plugins.android.library)
@@ -35,53 +38,102 @@ dependencies {
   implementation(libs.androidx.core.ktx)
   implementation(project(":mavenpub:proj_deps"))
   implementation(project(":mavenpub:proj_localaar"))
+  implementation(project(":mavenpub:proj_transaar"))
+}
+
+typealias Dep = Map<String, String>
+
+fun Node.t(name: String): String =
+  (get(name) as NodeList).text().toString()
+
+fun getLocalMavenPomDependencies(project: Project, file: File): List<Dep> {
+  val list = mutableListOf<Dep>()
+  project.logger.warn("getLocalMavenPomDependencies: path $file")
+
+  try {
+    val xml = XmlParser().parse(file)
+    val dependenciesNode = xml.children()
+      .filterIsInstance<Node>()
+      .find { it.name().toString().contains("dependencies") }
+
+    if (dependenciesNode == null) {
+      project.logger.warn("getLocalMavenPomDependencies no dependencies")
+      return list
+    }
+
+    val dependencies = dependenciesNode.children()
+      .filterIsInstance<Node>()
+
+    val deps = dependencies
+      .map { node ->
+        mapOf(
+          "group" to node.t("groupId"),
+          "name" to node.t("artifactId"),
+          "version" to node.t("version"),
+          "scope" to node.t("scope"),
+        )
+      }
+    list.addAll(deps)
+    project.logger.warn("getLocalMavenPomDependencies dependencies: ${dependencies.joinToString("\n")}")
+  } catch (e: Exception) {
+    project.logger.error("getLocalMavenPomDependencies error:", e)
+  }
+
+  return list
 }
 
 val collectDependencies by tasks.register("collectDependencies") {
   doLast {
-    try {
-      val allDependencies = mutableListOf<Map<String, String>>()
+    val allDependencies = mutableListOf<Map<String, String>>()
 
-      // Collect dependencies recursively
-      fun collectSubprojectDependencies(project: Project) {
-        project.configurations.getByName("implementation").dependencies.forEach { dep ->
-          // Ignore project dependencies and duplicates
-          if (dep !is ProjectDependency &&
-            allDependencies.none { it["group"] == dep.group && it["name"] == dep.name }
-          ) {
-            if (dep is FileCollectionDependency) {
-              println("collect deps: found file collection: \n${dep.files.joinToString("\n", prefix = "\t")}")
-              return@forEach
-            }
+    // Collect dependencies recursively
+    fun collectSubprojectDependencies(project: Project) {
+      project.configurations.getByName("implementation").dependencies.forEach { dep ->
 
-            println("collect deps: $dep")
-
-            if (dep.name.isBlank() || dep.group.isNullOrBlank() || dep.version.isNullOrBlank()) {
-              error("Invalid dependency: ${dep.name}")
-            }
-
-            allDependencies.add(
-              mapOf(
-                "group" to dep.group!!,
-                "name" to dep.name,
-                "version" to dep.version!!,
-              )
-            )
-          }
+        if (dep is FileCollectionDependency) {
+          println("collect deps: found file collection: \n${dep.files.joinToString("\n", prefix = "\t")}")
+          return@forEach
         }
-        // Recursively collect from subprojects
-        project.subprojects.forEach { subProj ->
-          collectSubprojectDependencies(subProj)
+
+        if (dep is ExternalModuleDependency && dep.group == "androidx.appcompat") {
+          println("collect deps: found external module: $dep, ${dep.javaClass}")
+          // if found some special dependency, we put our predefined pom dependencies to it
+          val localPomDependencies = getLocalMavenPomDependencies(project, file("react-native-0.66.5.pom"))
+          allDependencies.addAll(localPomDependencies)
+          return@forEach
+        }
+
+        // Ignore project dependencies and duplicates
+        if (dep !is ProjectDependency &&
+          allDependencies.none { it["group"] == dep.group && it["name"] == dep.name }
+        ) {
+
+          println("collect deps: $dep")
+
+          if (dep.name.isBlank() || dep.group.isNullOrBlank() || dep.version.isNullOrBlank()) {
+            error("Invalid dependency: $dep")
+          }
+
+          allDependencies.add(
+            mapOf(
+              "group" to dep.group!!,
+              "name" to dep.name,
+              "version" to dep.version!!,
+              "scope" to "compile",
+            )
+          )
         }
       }
-
-      collectSubprojectDependencies(project)
-
-      // Store dependencies for later use
-      project.extra["collectedDependencies"] = allDependencies
-    } catch (e: Exception) {
-      e.printStackTrace()
+      // Recursively collect from subprojects
+      project.subprojects.forEach { subProj ->
+        collectSubprojectDependencies(subProj)
+      }
     }
+
+    collectSubprojectDependencies(project)
+
+    // Store dependencies for later use
+    project.extra["collectedDependencies"] = allDependencies
   }
 }
 
@@ -137,6 +189,7 @@ publishing {
           appendNode("groupId", dep["group"])
           appendNode("artifactId", dep["name"])
           appendNode("version", dep["version"])
+          appendNode("scope", dep["scope"])
         }
       }
     }

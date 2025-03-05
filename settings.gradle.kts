@@ -35,6 +35,7 @@ include(":app")
 include(":mavenpub")
 include(":mavenpub:proj_deps")
 include(":mavenpub:proj_localaar")
+include(":mavenpub:proj_transaar")
 
 // ext
 include(":extension")
