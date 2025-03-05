@@ -30,7 +30,11 @@ include(":app")
 //include(":transparentdesktop")
 //include(":javetnodejs")
 //include(":jsviewdemo")
-include(":recyclerviewdemo")
+//include(":recyclerviewdemo")
+
+include(":mavenpub")
+include(":mavenpub:proj_deps")
+include(":mavenpub:proj_localaar")
 
 // ext
 include(":extension")
