@@ -37,7 +37,7 @@ android {
 dependencies {
   implementation(libs.androidx.core.ktx)
   implementation(project(":mavenpub:proj_deps"))
-  implementation(project(":mavenpub:proj_localaar"))
+//  implementation(project(":mavenpub:proj_localaar"))
   implementation(project(":mavenpub:proj_transaar"))
 }
 
